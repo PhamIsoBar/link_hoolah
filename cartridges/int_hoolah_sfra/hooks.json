@@ -1,0 +1,12 @@
+{
+    "hooks": [
+        {
+            "name": "app.payment.form.processor.hoolah",
+            "script": "./cartridge/scripts/hooks/payment/processor/hoolah_form_processor"
+        },
+        {
+            "name": "app.payment.processor.hoolah",
+            "script": "./cartridge/scripts/hooks/payment/processor/hoolah"
+        }
+    ]
+}
