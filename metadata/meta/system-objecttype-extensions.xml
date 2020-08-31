@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
-    <type-extension type-id="SitePreferences">
+    <type-extension type-id="Order">
         <custom-attribute-definitions>
-            <attribute-definition attribute-id="enableHoolah">
-                <display-name xml:lang="x-default">Enable Hoolah Payment</display-name>
-                <type>boolean</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
-            <attribute-definition attribute-id="singaporeUserCredential">
-                <display-name xml:lang="x-default">Singapore User Credential</display-name>
+            <attribute-definition attribute-id="orderContextToken">
+                <display-name xml:lang="x-default">Hoolah order context token</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="singaporePasswordCredential">
-                <display-name xml:lang="x-default">Singapore Password Credential</display-name>
+            <attribute-definition attribute-id="cartId">
+                <display-name xml:lang="x-default">Hoolah cart ID</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="malaysiaUserCredential">
-                <display-name xml:lang="x-default">Malaysia User Credential</display-name>
+            <attribute-definition attribute-id="orderHoolahUUID">
+                <display-name xml:lang="x-default">Hoolah order UUID</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="malaysiaPasswordCredential">
-                <display-name xml:lang="x-default">Malaysia Password Credential</display-name>
+            <attribute-definition attribute-id="failureMessage">
+                <display-name xml:lang="x-default">Hoolah failure message</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="failureCode">
+                <display-name xml:lang="x-default">Hoolah failure code</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
@@ -39,12 +40,42 @@
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="Hoolah Payment">
+                <display-name xml:lang="x-default">Hoolah Payment Attribute</display-name>
+                <attribute attribute-id="orderContextToken"/>
+                <attribute attribute-id="cartId"/>
+                <attribute attribute-id="orderHoolahUUID"/>
+                <attribute attribute-id="failureCode"/>
+                <attribute attribute-id="failureMessage"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+    <type-extension type-id="SitePreferences">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="enableHoolah">
+                <display-name xml:lang="x-default">Enable Hoolah Payment</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahLandingPageSing">
+                <display-name xml:lang="x-default">Hoolah Singapore Landing Page</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahLandingPageMalay">
+                <display-name xml:lang="x-default">Hoolah Malaysia Landing Page</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Hoolah Payment">
                 <display-name xml:lang="x-default">Hoolah Payment Config</display-name>
                 <attribute attribute-id="enableHoolah"/>
-                <attribute attribute-id="singaporeUserCredential"/>
-                <attribute attribute-id="singaporePasswordCredential"/>
-                <attribute attribute-id="malaysiaUserCredential"/>
-                <attribute attribute-id="malaysiaPasswordCredential"/>
+                <attribute attribute-id="hoolahLandingPageSing"/>
+                <attribute attribute-id="hoolahLandingPageMalay"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

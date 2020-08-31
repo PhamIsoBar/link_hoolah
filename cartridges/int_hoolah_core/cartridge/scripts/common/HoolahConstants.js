@@ -3,8 +3,12 @@
 */
 function HoolahConstants() {}
 HoolahConstants.MALAY_AUTH_SERVICE='hoolah_auth_malay';
-HoolahConstants.MALAY_AUTH_SERVICE='hoolah_auth_sing';
+HoolahConstants.SING_AUTH_SERVICE='hoolah_auth_sing';
+HoolahConstants.INIT_ORDER_SERVICE='hoolah_init_order';
 
+HoolahConstants.ORDER_TYPE='ONLINE';
+HoolahConstants.PHONE_EXT_SING=65;
+HoolahConstants.PHONE_EXT_MALAY=60;
 //Code Response
 HoolahConstants.NOTIFYCODE200='200';
 HoolahConstants.NOTIFYCODE201='201';
@@ -20,3 +24,5 @@ HoolahConstants.NOTIFYCODE422='422';
 HoolahConstants.NOTIFYCODE429='429';
 HoolahConstants.NOTIFYCODE500='500';
 HoolahConstants.NOTIFYCODE503='503';
+
+module.exports = HoolahConstants;
