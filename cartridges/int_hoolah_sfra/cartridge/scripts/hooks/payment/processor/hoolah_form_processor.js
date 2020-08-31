@@ -10,11 +10,10 @@ var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
  * @returns {Object} an object that has error information or payment information
  */
 function processForm(req, paymentForm, viewFormData) {
-
     var viewData = viewFormData;
     var creditCardErrors = {};
 
-    if (!req.form.storedPaymentUUID && paymentForm.paymentMethod.value != 'Hoolah') {
+    if (!req.form.storedPaymentUUID && paymentForm.paymentMethod.value !== 'Hoolah') {
         // verify credit card form data
         creditCardErrors = COHelpers.validateCreditCard(paymentForm);
     }
@@ -47,8 +46,9 @@ function processForm(req, paymentForm, viewFormData) {
  * @param {Object} req - The request object
  * @param {dw.order.Basket} basket - The current basket
  * @param {Object} billingData - payment information
+ * @returns {boolean} - return true for Hoolah
  */
-function savePaymentInformation(req, basket, billingData) { // eslint-disable
+function savePaymentInformation(req, basket, billingData) { // eslint-disable-line
     return true;
 }
 

@@ -23,7 +23,7 @@ function createToken() {
  * @return {Object} returns an error object
  */
 function Handle(basket, paymentInformation, paymentMethodID, req) { //eslint-disable-line
-
+    var result = false;
     if (paymentInformation.country === 'SG' || paymentInformation.country === 'MY') {
         var currentBasket = basket;
         Transaction.wrap(function () {
@@ -37,10 +37,9 @@ function Handle(basket, paymentInformation, paymentMethodID, req) { //eslint-dis
                 'Hoolah', currentBasket.totalGrossPrice
             );
         });
-        return true;
-    } else {
-        return false;
+        result = true;
     }
+    return result;
 }
 
 /**
@@ -53,10 +52,11 @@ function Handle(basket, paymentInformation, paymentMethodID, req) { //eslint-dis
  * @return {Object} returns an error object
  */
 function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
-    //Call service init order here
+    // Call service init order here
     var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRequests');
     var OrderMgr = require('dw/order/OrderMgr');
     var order = OrderMgr.getOrder(orderNumber);
+    var hoolahURL;
     if (order) {
         var countryCode = order.billingAddress.countryCode.value;
         var token = createRequests.createGetTokenRequest(countryCode).object.token;
@@ -65,7 +65,6 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
         Transaction.wrap(function () {
             order.custom.orderContextToken = orderContextToken;
         });
-        var hoolahURL;
         if (countryCode === 'SG') {
             hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
         } else {
@@ -89,7 +88,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
         );
     }
 
-    return { fieldErrors: fieldErrors, serverErrors: serverErrors, error: error, redirectLink: hoolahURL, isHoolah: true};
+    return { fieldErrors: fieldErrors, serverErrors: serverErrors, error: error, redirectLink: hoolahURL, isHoolah: true };
 }
 
 exports.Handle = Handle;

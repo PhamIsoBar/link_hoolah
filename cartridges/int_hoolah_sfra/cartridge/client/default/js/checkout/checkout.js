@@ -325,7 +325,7 @@ var scrollAnimate = require('base/components/scrollAnimate');
                                     defer.reject(data);
                                 }
                             } else {
-                                if (data.isHoolah) {
+                                if (data.isHoolah) { // eslint-disable-line
                                     window.location.href = data.redirectUrl;
                                     defer.resolve(data);
                                 } else {
@@ -516,16 +516,16 @@ var scrollAnimate = require('base/components/scrollAnimate');
 
         return this;
     };
-}(jQuery));
+}(jQuery)); // eslint-disable-line
 
 
 var exports = {
     initialize: function () {
-        $('#checkout-main').checkout();
+        $('#checkout-main').checkout(); // eslint-disable-line
     },
 
     updateCheckoutView: function () {
-        $('body').on('checkout:updateCheckoutView', function (e, data) {
+        $('body').on('checkout:updateCheckoutView', function (e, data) {// eslint-disable-line
             shippingHelpers.methods.updateMultiShipInformation(data.order);
             summaryHelpers.updateTotals(data.order.totals);
             data.order.shipping.forEach(function (shipping) {
@@ -547,14 +547,14 @@ var exports = {
     },
 
     disableButton: function () {
-        $('body').on('checkout:disableButton', function (e, button) {
-            $(button).prop('disabled', true);
+        $('body').on('checkout:disableButton', function (e, button) {// eslint-disable-line
+            $(button).prop('disabled', true);// eslint-disable-line
         });
     },
 
     enableButton: function () {
-        $('body').on('checkout:enableButton', function (e, button) {
-            $(button).prop('disabled', false);
+        $('body').on('checkout:enableButton', function (e, button) {// eslint-disable-line
+            $(button).prop('disabled', false);// eslint-disable-line
         });
     }
 
@@ -564,7 +564,7 @@ var exports = {
 [billingHelpers, shippingHelpers, addressHelpers].forEach(function (library) {
     Object.keys(library).forEach(function (item) {
         if (typeof library[item] === 'object') {
-            exports[item] = $.extend({}, exports[item], library[item]);
+            exports[item] = $.extend({}, exports[item], library[item]);// eslint-disable-line
         } else {
             exports[item] = library[item];
         }

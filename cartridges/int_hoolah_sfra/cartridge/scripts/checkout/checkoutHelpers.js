@@ -1,14 +1,9 @@
 'use strict';
 
-var server = require('server');
-
-var collections = require('*/cartridge/scripts/util/collections');
-
-var BasketMgr = require('dw/order/BasketMgr');
 var HookMgr = require('dw/system/HookMgr');
 var OrderMgr = require('dw/order/OrderMgr');
-var PaymentInstrument = require('dw/order/PaymentInstrument');
 var PaymentMgr = require('dw/order/PaymentMgr');
+var Transaction = require('dw/system/Transaction');
 var checkoutHelperBase = require('app_storefront_base/cartridge/scripts/checkout/checkoutHelpers');
 
 /**
@@ -62,7 +57,7 @@ function handlePayments(order, orderNumber) {
                         break;
                     } else if (authorizationResult.isHoolah) {
                         result.isHoolah = true;
-                        result.redirectLink = authorizationResult.redirectLink
+                        result.redirectLink = authorizationResult.redirectLink;
                     }
                 }
             }

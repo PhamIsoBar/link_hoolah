@@ -4,15 +4,20 @@
  * while this script is imported into the
  * requiring script.
  */
-var Logger = require('dw/system/Logger');
 var ImageModel = require('*/cartridge/models/product/productImages');
 var HoolahConstants = require('*/cartridge/scripts/common/HoolahConstants');
 var URLUtils = require('dw/web/URLUtils');
 
+/**
+ * Get JSON string of order
+ * @param {dw.order.Order} order - The order object to be placed
+ * @param {Object} fraudDetectionStatus - an Object returned by the fraud detection hook
+ * @returns {Object} an error object
+ */
 function getOrderJSON(order) {
-    var orderData = new Object;
-    var shippingAddress = new Object;
-    var billingAddress = new Object;
+    var orderData = new Object();
+    var shippingAddress = new Object();
+    var billingAddress = new Object();
     var items = [];
 
     shippingAddress.line1 = order.shipments[0].shippingAddress.address1;
@@ -29,7 +34,7 @@ function getOrderJSON(order) {
 
     var productLineItems = order.productLineItems;
     for (var i = 0; i < productLineItems.length; i++) {
-        var lineItem = new Object;
+        var lineItem = new Object();
         lineItem.name = productLineItems[i].productName;
         lineItem.description = productLineItems[i].lineItemText;
         lineItem.sku = productLineItems[i].productID;
@@ -42,20 +47,21 @@ function getOrderJSON(order) {
         var images = [];
         var productImages = new ImageModel(productLineItems[i].product, { types: ['small'], quantity: 'single' });
         if (productImages && productImages.small) {
-            productImages.small.forEach(function(image) {
+            var imageList = productImages.small;
+            for (var j = 0; j < imageList.length; j++) {
                 images.push({
-                    "imageLocation": image.absURL
+                    imageLocation: imageList[j].absURL
                 });
-            });
+            }
         }
         lineItem.images = images;
         items.push(lineItem);
     }
     orderData.consumerEmail = order.customerEmail;
-    orderData.consumerFirstName =  order.billingAddress.firstName;
-    orderData.consumerMiddleName = "";
+    orderData.consumerFirstName = order.billingAddress.firstName;
+    orderData.consumerMiddleName = '';
     orderData.consumerLastName = order.billingAddress.lastName;
-    orderData.consumerTitle = "";
+    orderData.consumerTitle = '';
     orderData.consumerPhoneNumber = order.billingAddress.phone;
     orderData.consumerPhoneNumberExtension = (order.billingAddress.countryCode.value === 'SG') ? HoolahConstants.PHONE_EXT_SING : HoolahConstants.PHONE_EXT_MALAY;
     orderData.cartId = order.orderNo;
@@ -66,10 +72,9 @@ function getOrderJSON(order) {
     orderData.taxAmount = order.totalTax.value;
     orderData.shippingMethod = order.shipments[0].shippingMethod.displayName;
     orderData.shippingAmount = order.shippingTotalNetPrice.value;
-    orderData.voucherCode = 'HOOLAH';
     orderData.callbackUrl = URLUtils.https('Hoolah-HandleCallback').toString();
     orderData.closeUrl = URLUtils.https('Hoolah-CloseUrl', 'orderID', order.orderNo).toString();
-    orderData.returnToShopUrl = URLUtils.https('Order-Confirm', 'ID', order.orderNo, 'token', order.orderToken).toString();//success payment
+    orderData.returnToShopUrl = URLUtils.https('Order-Confirm', 'ID', order.orderNo, 'token', order.orderToken).toString();
     orderData.shippingAddress = shippingAddress;
     orderData.billingAddress = billingAddress;
     orderData.items = items;
@@ -113,4 +118,4 @@ function placeOrder(order) {
 module.exports = {
     getOrderJSON: getOrderJSON,
     placeOrder: placeOrder
-}
+};

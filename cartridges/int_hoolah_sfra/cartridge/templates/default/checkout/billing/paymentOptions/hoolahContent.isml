@@ -1,3 +1,4 @@
+<isinclude template="/components/modules" sf-toolkit="off" />
 <div class="tab-pane active hoolah-content" id="hoolah-content" role="tabpanel" style="display:none;">
     <fieldset class="payment-form-fields">
 
@@ -6,6 +7,6 @@
                name="${pdict.forms.billingForm.paymentMethod.htmlName}"
                value="Hoolah"
         >
-        Hoolah content
+        <iscontentasset aid="hoolah-payment" />
     </fieldset>
 </div>
