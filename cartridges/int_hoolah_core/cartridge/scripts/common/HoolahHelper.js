@@ -4,7 +4,7 @@
  * while this script is imported into the
  * requiring script.
  */
-var ImageModel = require('*/cartridge/models/product/productImages');
+// var ImageModel = require('*/cartridge/models/product/productImages');
 var HoolahConstants = require('*/cartridge/scripts/common/HoolahConstants');
 var URLUtils = require('dw/web/URLUtils');
 
@@ -45,14 +45,12 @@ function getOrderJSON(order) {
         lineItem.taxAmount = order.productLineItems[i].tax.value;
         lineItem.detailDescription = order.productLineItems[i].tax.value;
         var images = [];
-        var productImages = new ImageModel(productLineItems[i].product, { types: ['small'], quantity: 'single' });
-        if (productImages && productImages.small) {
-            var imageList = productImages.small;
-            for (var j = 0; j < imageList.length; j++) {
-                images.push({
-                    imageLocation: imageList[j].absURL
-                });
-            }
+        var productImages = productLineItems[i].product.getImages('small');
+        var firstImage = productImages[0];
+        if (firstImage) {
+            images.push({
+                imageLocation: firstImage.absURL.toString()
+            });
         }
         lineItem.images = images;
         items.push(lineItem);
@@ -71,6 +69,14 @@ function getOrderJSON(order) {
     orderData.currency = order.currencyCode;
     orderData.taxAmount = order.totalTax.value;
     orderData.shippingMethod = order.shipments[0].shippingMethod.displayName;
+    var couponLineItems = order.couponLineItems;
+    var voucherCode = '';
+    if (couponLineItems.length > 0) {
+        for (var j = 0; j < couponLineItems.length; j++) {
+            voucherCode += couponLineItems[j].couponCode;
+        }
+    }
+    orderData.voucherCode = voucherCode;
     orderData.shippingAmount = order.shippingTotalNetPrice.value;
     orderData.callbackUrl = URLUtils.https('Hoolah-HandleCallback').toString();
     orderData.closeUrl = URLUtils.https('Hoolah-CloseUrl', 'orderID', order.orderNo).toString();

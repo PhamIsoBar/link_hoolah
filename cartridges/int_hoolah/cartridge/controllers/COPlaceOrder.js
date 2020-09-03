@@ -66,7 +66,7 @@ function handlePayments(order) {
                 } else if (authorizationResult.isHoolah) {
                     return {
                         isHoolah: true,
-                        redirectLink: hoolahURL
+                        redirectLink: authorizationResult.redirectLink
                     };
                 }
             }
@@ -162,7 +162,6 @@ function start() {
         });
 
     } else if (handlePaymentsResult.missingPaymentInfo) {
-        var thao = 0;
         return Transaction.wrap(function () {
             OrderMgr.failOrder(order);
             return {
@@ -171,7 +170,8 @@ function start() {
             };
         });
     } else if (handlePaymentsResult.isHoolah) {
-        return response.redirect(handlePaymentsResult.redirectLink);
+        response.redirect(handlePaymentsResult.redirectLink);
+        return {};
     }
 
     var orderPlacementStatus = Order.submit(order);
@@ -196,7 +196,7 @@ function clearForms() {
  * Web exposed methods
  */
 /** @see module:controllers/COPlaceOrder~submitPaymentJSON */
-exports.SubmitPaymentJSON = COPlaceOrderBase.guard.SubmitPaymentJSON;
+exports.SubmitPaymentJSON = COPlaceOrderBase.SubmitPaymentJSON;
 /** @see module:controllers/COPlaceOrder~submitPaymentJSON */
 exports.Submit = COPlaceOrderBase.Submit;
 

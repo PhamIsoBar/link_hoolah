@@ -86,7 +86,7 @@
                     <span>${Resource.msg('billing.creditcardlistexpdate', 'checkout', null)}</span>
                 </label>
                 <isscript>
-                    var currentCountry = require('~/cartridge/scripts/util/Countries').getCurrent(pdict);
+                    var currentCountry = require('*/cartridge/scripts/util/Countries').getCurrent(pdict);
                 </isscript>
 
                 <isdynamicform formobject="${pdict.CurrentForms.billing.paymentMethods.creditCard.expiration}" formdata="${currentCountry.dynamicForms.expirationInfo}"/>
@@ -139,10 +139,9 @@
             Custom processor
             --------------------------------------------------------------
         </iscomment>
-
-        <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='PayPal'}">payment-method-expanded</isif>" data-method="Custom">
+        <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='Hoolah'}">payment-method-expanded</isif>" data-method="Hoolah">
             <!-- Your custom payment method implementation goes here. -->
-            ${Resource.msg('billing.custompaymentmethod','checkout',null)}
+            <iscontentasset aid="hoolah-payment" />
         </div>
     </fieldset>
 <iselse/>
