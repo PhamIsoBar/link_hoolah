@@ -6,7 +6,7 @@
 *
 *
 /*********************************************************************************/
-var HoolahConstants = require('*/cartridge/scripts/common/HoolahConstants');
+var HoolahConstants = require('int_hoolah_core/cartridge/scripts/common/HoolahConstants');
 var initServices = require('int_hoolah_core/cartridge/scripts/service/init/httpServices');
 var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelper');
 
@@ -40,8 +40,51 @@ function createInitOrderRequest(order, token) {
     return initServices.callInitOrderService(HoolahConstants.INIT_ORDER_SERVICE, orderData, token);
 }
 
+/**
+ * Call service to init order from Hoolah
+ * @param {Object} requestObject - Order object
+ * @param {string} token - Token to send request
+ * @returns {Object} - result - an result object
+ */
+function createFullRefundRequest(requestObject, token) {
+    var orderUUID = requestObject.custom['order-uuid'];
+    var requestData = {
+        description: requestObject.custom.description
+    };
+    return initServices.callRefundService(HoolahConstants.FULL_REFUND_SERVICE, requestData, token, orderUUID);
+}
+
+/**
+ * Call service to init order from Hoolah
+ * @param {Object} requestObject - Order object
+ * @param {string} token - Token to send request
+ * @returns {Object} - result - an result object
+ */
+function createPartialRefundRequest(requestObject, token) {
+    var orderUUID = requestObject.custom['order-uuid'];
+    var items = [];
+    var requestData = {
+        description: requestObject.custom.description,
+        amount: requestObject.custom.amount
+    };
+    if (requestObject.custom.items.length > 0) {
+        var itemRefund = requestObject.custom.items;
+        for (var i = 0; i < itemRefund.length; i++) {
+            items.push({
+                sku: itemRefund[i]
+            });
+        }
+    }
+    if (items.length > 0) {
+        requestData.items = items;
+    }
+    return initServices.callRefundService(HoolahConstants.PARTIAL_REFUND_SERVICE, requestData, token, orderUUID);
+}
+
 /** Exported functions **/
 module.exports = {
     createGetTokenRequest: createGetTokenRequest,
-    createInitOrderRequest: createInitOrderRequest
+    createInitOrderRequest: createInitOrderRequest,
+    createFullRefundRequest: createFullRefundRequest,
+    createPartialRefundRequest: createPartialRefundRequest
 };

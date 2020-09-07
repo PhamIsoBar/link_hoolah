@@ -21,6 +21,34 @@ var guard = require('*/cartridge/scripts/guard');
 var Cart = app.getModel('Cart');
 
 /**
+ * Renders the order confirmation page after successful order
+ * creation. If a nonregistered customer has checked out, the confirmation page
+ * provides a "Create Account" form. This function handles the
+ * account creation.
+ */
+function showConfirmation(order) {
+    if (!customer.authenticated) {
+        // Initializes the account creation form for guest checkouts by populating the first and last name with the
+        // used billing address.
+        var customerForm = app.getForm('profile.customer');
+        customerForm.setValue('firstname', order.billingAddress.firstName);
+        customerForm.setValue('lastname', order.billingAddress.lastName);
+        customerForm.setValue('email', order.customerEmail);
+        customerForm.setValue('orderNo', order.orderNo);
+    }
+
+    app.getForm('profile.login.passwordconfirm').clear();
+    app.getForm('profile.login.password').clear();
+
+    var pageMeta = require('*/cartridge/scripts/meta');
+    pageMeta.update({ pageTitle: Resource.msg('confirmation.meta.pagetitle', 'checkout', 'SiteGenesis Checkout Confirmation') });
+    app.getView({
+        Order: order,
+        ContinueURL: URLUtils.https('Account-RegistrationForm') // needed by registration form after anonymous checkouts
+    }).render('checkout/confirmation/confirmation');
+}
+
+/**
  * Renders the summary page prior to order creation.
  * @param {Object} context context object used for the view
  */
@@ -49,7 +77,7 @@ function start(context) {
         var viewContext = require('app_storefront_core/cartridge/scripts/common/extend').immutable(context, {
             Basket: cart.object
         });
-        pageMeta.update({pageTitle: Resource.msg('summary.meta.pagetitle', 'checkout', 'SiteGenesis Checkout')});
+        pageMeta.update({ pageTitle: Resource.msg('summary.meta.pagetitle', 'checkout', 'SiteGenesis Checkout') });
         app.getView(viewContext).render('checkout/summary/summary');
     }
 }
@@ -71,34 +99,6 @@ function submit() {
     } else if (placeOrderResult.order_created) {
         showConfirmation(placeOrderResult.Order);
     }
-}
-
-/**
- * Renders the order confirmation page after successful order
- * creation. If a nonregistered customer has checked out, the confirmation page
- * provides a "Create Account" form. This function handles the
- * account creation.
- */
-function showConfirmation(order) {
-    if (!customer.authenticated) {
-        // Initializes the account creation form for guest checkouts by populating the first and last name with the
-        // used billing address.
-        var customerForm = app.getForm('profile.customer');
-        customerForm.setValue('firstname', order.billingAddress.firstName);
-        customerForm.setValue('lastname', order.billingAddress.lastName);
-        customerForm.setValue('email', order.customerEmail);
-        customerForm.setValue('orderNo', order.orderNo);
-    }
-
-    app.getForm('profile.login.passwordconfirm').clear();
-    app.getForm('profile.login.password').clear();
-
-    var pageMeta = require('*/cartridge/scripts/meta');
-    pageMeta.update({pageTitle: Resource.msg('confirmation.meta.pagetitle', 'checkout', 'SiteGenesis Checkout Confirmation')});
-    app.getView({
-        Order: order,
-        ContinueURL: URLUtils.https('Account-RegistrationForm') // needed by registration form after anonymous checkouts
-    }).render('checkout/confirmation/confirmation');
 }
 
 /*

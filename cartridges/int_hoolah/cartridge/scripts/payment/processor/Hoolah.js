@@ -10,6 +10,8 @@ var Transaction = require('dw/system/Transaction');
 /**
  * Verifies a credit card against a valid card number and expiration date and possibly invalidates invalid form fields.
  * If the verification was successful a credit card payment instrument is created.
+ * @param {Object} args param for handle order
+ * @returns {Object} status of handle order
  */
 function Handle(args) {
     var cart = Cart.get(args.Basket);
@@ -32,6 +34,8 @@ function Handle(args) {
  * Authorizes a payment using a credit card. The payment is authorized by using the BASIC_CREDIT processor
  * only and setting the order no as the transaction ID. Customizations may use other processors and custom
  * logic to authorize credit card payment.
+ * @param {Object} args - Params for authorzie order
+ * @returns {Object} status of authorize order
  */
 function Authorize(args) {
     var orderNo = args.OrderNo;

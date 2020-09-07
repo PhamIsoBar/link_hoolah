@@ -14,9 +14,12 @@ var guard = require('*/cartridge/scripts/guard');
 var OrderBase = require('app_storefront_controllers/cartridge/controllers/Order');
 var COSummary = require('*/cartridge/controllers/COSummary');
 
+/**
+ * Generate order after success and redirect from Hoolah
+ */
 function confirm() {
-    var order = OrderMgr.getOrder(request.httpParameterMap.ID);
-    COSummary.ShowConfirmation(order);
+    var order = OrderMgr.getOrder(request.httpParameterMap.ID); //eslint-disable-line
+    COSummary.ShowConfirmation(order); //eslint-disable-line
 }
 /*
  * Module exports

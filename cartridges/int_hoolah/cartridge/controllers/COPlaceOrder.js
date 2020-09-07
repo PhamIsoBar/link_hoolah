@@ -48,7 +48,7 @@ function handlePayments(order) {
          * Sets the transaction ID for the payment instrument.
          */
         var handlePaymentTransaction = function () {
-            paymentInstrument.getPaymentTransaction().setTransactionID(order.getOrderNo());
+            paymentInstrument.getPaymentTransaction().setTransactionID(order.getOrderNo()); //eslint-disable-line
         };
 
         for (var i = 0; i < paymentInstruments.length; i++) {
@@ -74,6 +74,13 @@ function handlePayments(order) {
     }
 
     return {};
+}
+
+function clearForms() {
+    // Clears all forms used in the checkout process.
+    session.forms.singleshipping.clearFormElement();
+    session.forms.multishipping.clearFormElement();
+    session.forms.billing.clearFormElement();
 }
 
 /**
@@ -114,7 +121,7 @@ function start() {
 
     var COBilling = app.getController('COBilling');
 
-    Transaction.wrap(function () {
+    Transaction.wrap(function () { //eslint-disable-line
         if (!COBilling.ValidatePayment(cart)) {
             COBilling.Start();
             return {};
@@ -123,7 +130,7 @@ function start() {
 
     // Recalculate the payments. If there is only gift certificates, make sure it covers the order total, if not
     // back to billing page.
-    Transaction.wrap(function () {
+    Transaction.wrap(function () { // eslint-disable-line
         if (!cart.calculatePaymentTransactionTotal()) {
             COBilling.Start();
             return {};
@@ -160,7 +167,6 @@ function start() {
                 PlaceOrderError: new Status(Status.ERROR, 'confirm.error.technical')
             };
         });
-
     } else if (handlePaymentsResult.missingPaymentInfo) {
         return Transaction.wrap(function () {
             OrderMgr.failOrder(order);
@@ -179,13 +185,6 @@ function start() {
         clearForms();
     }
     return orderPlacementStatus;
-}
-
-function clearForms() {
-    // Clears all forms used in the checkout process.
-    session.forms.singleshipping.clearFormElement();
-    session.forms.multishipping.clearFormElement();
-    session.forms.billing.clearFormElement();
 }
 
 /*

@@ -4,8 +4,7 @@
  * while this script is imported into the
  * requiring script.
  */
-// var ImageModel = require('*/cartridge/models/product/productImages');
-var HoolahConstants = require('*/cartridge/scripts/common/HoolahConstants');
+var HoolahConstants = require('int_hoolah_core/cartridge/scripts/common/HoolahConstants');
 var URLUtils = require('dw/web/URLUtils');
 
 /**

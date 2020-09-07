@@ -8,7 +8,10 @@
 
 var guard = require('*/cartridge/scripts/guard');
 var URLUtils = require('dw/web/URLUtils');
-
+var Resource = require('dw/web/Resource');
+/**
+ * Attempts handle call back from Hoolah
+ */
 function handleCallBack() {
     var params = request.httpParameterMap;// eslint-disable-line
     var responseData = JSON.parse(params.requestBodyAsString);
@@ -38,6 +41,10 @@ function handleCallBack() {
     }
 }
 
+/**
+ * Attempts to handle close browser or redirect back when
+ * processing order
+ */
 function closeUrl() {
     var orderID = request.httpParameterMap.orderID.stringValue;
     var OrderMgr = require('dw/order/OrderMgr');
