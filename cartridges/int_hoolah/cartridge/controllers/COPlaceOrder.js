@@ -60,6 +60,13 @@ function handlePayments(order) {
                 var authorizationResult = PaymentProcessor.authorize(order, paymentInstrument);
 
                 if (authorizationResult.not_supported || authorizationResult.error) {
+                    if (authorizationResult.isHoolah) {
+                        return {
+                            error: true,
+                            isHoolah: true,
+                            message: authorizationResult.message
+                        };
+                    }
                     return {
                         error: true
                     };
@@ -162,6 +169,12 @@ function start() {
     if (handlePaymentsResult.error) {
         return Transaction.wrap(function () {
             OrderMgr.failOrder(order);
+            if (handlePaymentsResult.isHoolah) {
+                return {
+                    error: true,
+                    PlaceOrderError: new Status(Status.ERROR, 'confirm.error.technical')
+                };
+            }
             return {
                 error: true,
                 PlaceOrderError: new Status(Status.ERROR, 'confirm.error.technical')

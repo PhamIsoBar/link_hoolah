@@ -44,18 +44,28 @@ function Authorize(args) {
     var hoolahURL;
     if (order) {
         var countryCode = order.billingAddress.countryCode.value;
-        var token = createRequests.createGetTokenRequest(countryCode).object.token;
-        var initOrderHoolah = createRequests.createInitOrderRequest(order, token).object;
-        var orderContextToken = initOrderHoolah.orderContextToken;
-        Transaction.wrap(function () {
-            order.custom.orderContextToken = orderContextToken;
-        });
-        if (countryCode === 'SG') {
-            hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+        var tokenResult = createRequests.createGetTokenRequest(countryCode);
+        if (tokenResult.ok) {
+            var token = createRequests.createGetTokenRequest(countryCode).object.token;
+            var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
+            if (!initOrderHoolahResult.ok) {
+                return { error: true, isHoolah: true };
+            } else {
+                var initOrderHoolah = createRequests.createInitOrderRequest(order, token).object;
+                var orderContextToken = initOrderHoolah.orderContextToken;
+                Transaction.wrap(function () {
+                    order.custom.orderContextToken = orderContextToken;
+                });
+                if (countryCode === 'SG') {
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+                } else {
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+                }
+                hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
+            }
         } else {
-            hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+            return { error: true, isHoolah: true };
         }
-        hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
     }
     var paymentInstrument = args.PaymentInstrument;
     var paymentProcessor = PaymentMgr.getPaymentMethod(paymentInstrument.getPaymentMethod()).getPaymentProcessor();

@@ -73,7 +73,7 @@ function start(context) {
             }
         });
 
-        var pageMeta = require('~/cartridge/scripts/meta');
+        var pageMeta = require('*/cartridge/scripts/meta');
         var viewContext = require('app_storefront_core/cartridge/scripts/common/extend').immutable(context, {
             Basket: cart.object
         });

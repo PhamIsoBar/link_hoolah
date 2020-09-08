@@ -61,28 +61,38 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
     var OrderMgr = require('dw/order/OrderMgr');
     var order = OrderMgr.getOrder(orderNumber);
     var hoolahURL;
+    var result;
     if (order) {
         var countryCode = order.billingAddress.countryCode.value;
-        var token = createRequests.createGetTokenRequest(countryCode).object.token;
-        var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
-        if (!initOrderHoolahResult.ok) {
-            var result = JSON.parse(initOrderHoolahResult.errorMessage);
+        var tokenResult = createRequests.createGetTokenRequest(countryCode);
+        if (tokenResult.ok) {
+            var token = createRequests.createGetTokenRequest(countryCode).object.token;
+            var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
+            if (!initOrderHoolahResult.ok) {
+                result = JSON.parse(initOrderHoolahResult.errorMessage);
+                error = true;
+                serverErrors.push(
+                    result.errorCode + ': ' + result.errorMessages[0]
+                );
+            } else {
+                initOrderHoolah = initOrderHoolahResult.object;
+                var orderContextToken = initOrderHoolah.orderContextToken;
+                Transaction.wrap(function () {
+                    order.custom.orderContextToken = orderContextToken;
+                });
+                if (countryCode === 'SG') {
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+                } else {
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+                }
+                hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
+            }
+        } else {
+            result = JSON.parse(tokenResult.errorMessage);
             error = true;
             serverErrors.push(
                 result.errorCode + ': ' + result.errorMessages[0]
             );
-        } else {
-            initOrderHoolah = initOrderHoolahResult.object;
-            var orderContextToken = initOrderHoolah.orderContextToken;
-            Transaction.wrap(function () {
-                order.custom.orderContextToken = orderContextToken;
-            });
-            if (countryCode === 'SG') {
-                hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
-            } else {
-                hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
-            }
-            hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
         }
     }
     try {
