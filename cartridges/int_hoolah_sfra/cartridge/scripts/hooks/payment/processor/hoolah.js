@@ -53,6 +53,10 @@ function Handle(basket, paymentInformation, paymentMethodID, req) { //eslint-dis
  */
 function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
     // Call service init order here
+    var serverErrors = [];
+    var fieldErrors = {};
+    var error = false;
+
     var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRequests');
     var OrderMgr = require('dw/order/OrderMgr');
     var order = OrderMgr.getOrder(orderNumber);
@@ -60,22 +64,27 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
     if (order) {
         var countryCode = order.billingAddress.countryCode.value;
         var token = createRequests.createGetTokenRequest(countryCode).object.token;
-        var initOrderHoolah = createRequests.createInitOrderRequest(order, token).object;
-        var orderContextToken = initOrderHoolah.orderContextToken;
-        Transaction.wrap(function () {
-            order.custom.orderContextToken = orderContextToken;
-        });
-        if (countryCode === 'SG') {
-            hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+        var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
+        if (!initOrderHoolahResult.ok) {
+            var result = JSON.parse(initOrderHoolahResult.errorMessage);
+            error = true;
+            serverErrors.push(
+                result.errorCode + ': ' + result.errorMessages[0]
+            );
         } else {
-            hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+            initOrderHoolah = initOrderHoolahResult.object;
+            var orderContextToken = initOrderHoolah.orderContextToken;
+            Transaction.wrap(function () {
+                order.custom.orderContextToken = orderContextToken;
+            });
+            if (countryCode === 'SG') {
+                hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+            } else {
+                hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+            }
+            hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
         }
-        hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
     }
-    var serverErrors = [];
-    var fieldErrors = {};
-    var error = false;
-
     try {
         Transaction.wrap(function () {
             paymentInstrument.paymentTransaction.setTransactionID(orderNumber);

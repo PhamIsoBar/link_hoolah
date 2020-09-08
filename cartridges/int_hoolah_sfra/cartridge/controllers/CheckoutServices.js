@@ -130,10 +130,17 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
     // Handles payment authorization
     var handlePaymentResult = COHelpers.handlePayments(order, order.orderNo);
     if (handlePaymentResult.error) {
-        res.json({
-            error: true,
-            errorMessage: Resource.msg('error.technical', 'checkout', null)
-        });
+        if (handlePaymentResult.isHoolah) {
+            res.json({
+                error: true,
+                errorMessage: handlePaymentResult.errorMessage
+            });
+        } else {
+            res.json({
+                error: true,
+                errorMessage: Resource.msg('error.technical', 'checkout', null)
+            });
+        }
         return next();
     }
 
@@ -154,7 +161,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         return next();
     }
     // Hoolah redirect
-    if (handlePaymentResult.isHoolah) {
+    if (handlePaymentResult.isHoolah && handlePaymentResult.error === false) {
         res.json({
             isHoolah: true,
             redirectUrl: handlePaymentResult.redirectLink

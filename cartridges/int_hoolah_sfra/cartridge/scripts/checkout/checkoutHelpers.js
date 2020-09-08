@@ -54,6 +54,10 @@ function handlePayments(order, orderNumber) {
                     if (authorizationResult.error) {
                         Transaction.wrap(function () { OrderMgr.failOrder(order, true); });
                         result.error = true;
+                        if (authorizationResult.isHoolah) {
+                            result.isHoolah = true;
+                            result.errorMessage = authorizationResult.serverErrors;
+                        }
                         break;
                     } else if (authorizationResult.isHoolah) {
                         result.isHoolah = true;
