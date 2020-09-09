@@ -1,7 +1,6 @@
 <isinclude template="/components/modules" sf-toolkit="off" />
-<div class="tab-pane active hoolah-content" id="hoolah-content" role="tabpanel" style="display:none;">
+<div class="tab-pane hoolah-content" id="hoolah-content" role="tabpanel">
     <fieldset class="payment-form-fields">
-
         <!--- payment method is credit card --->
         <input type="hidden" class="form-control"
                name="${pdict.forms.billingForm.paymentMethod.htmlName}"

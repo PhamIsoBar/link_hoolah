@@ -50,5 +50,26 @@ module.exports = {
     addNewPaymentInstrument: baseBilling.addNewPaymentInstrument,
     cancelNewPayment: baseBilling.cancelNewPayment,
     clearBillingForm: baseBilling.clearBillingForm,
-    paymentTabs: baseBilling.paymentTabs
+
+    paymentTabs: function () {
+        $('.payment-options .nav-item').on('click', function (e) {
+            e.preventDefault();
+            var methodID = $(this).data('method-id');
+            $('.payment-information').data('payment-method-id', methodID);
+            var methodClass;
+            if (methodID === 'Hoolah') {
+                methodClass = 'hoolah-content';
+            } else if (methodID === 'CREDIT_CARD') {
+                methodClass = 'credit-card-content';
+            }
+            var methodsContent = $('.tab-pane');
+            for (var i = 0; i < methodsContent.length; i++) {
+                if ($(methodsContent[i]).hasClass(methodClass)) {
+                    $(methodsContent[i]).addClass('active');
+                } else {
+                    $(methodsContent[i]).removeClass('active');
+                }
+            }
+        });
+    }
 };
