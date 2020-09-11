@@ -71,6 +71,31 @@ function handlePayments(order, orderNumber) {
     return result;
 }
 
+/**
+ * Handle paymentInstrusment before add or edit paymentIntrusment
+ * @param {dw.order.Basket} currentBasket - Current basket
+ * @param {string} paymentMethodSelected - payment method
+ */
+function handlePaymentInstrusment(currentBasket, paymentMethodSelected) {
+    var allPaymentInstruments = currentBasket.getPaymentInstruments().iterator();
+    var paymentInstruments = currentBasket.getPaymentInstruments(
+        paymentMethodSelected
+    );
+    Transaction.wrap(function () {
+        if (paymentInstruments.length > 0) {
+            while (allPaymentInstruments.hasNext()) {
+                var instrusment = allPaymentInstruments.next();
+                if (instrusment.paymentMethod !== paymentMethodSelected) {
+                    currentBasket.removePaymentInstrument(instrusment);
+                }
+            }
+        } else {
+            currentBasket.removeAllPaymentInstruments();
+        }
+    });
+}
+
+
 module.exports = {
     getFirstNonDefaultShipmentWithProductLineItems: checkoutHelperBase.getFirstNonDefaultShipmentWithProductLineItems,
     ensureNoEmptyShipments: checkoutHelperBase.ensureNoEmptyShipments,
@@ -96,5 +121,6 @@ module.exports = {
     getRenderedPaymentInstruments: checkoutHelperBase.getRenderedPaymentInstruments,
     sendConfirmationEmail: checkoutHelperBase.sendConfirmationEmail,
     ensureValidShipments: checkoutHelperBase.ensureValidShipments,
-    setGift: checkoutHelperBase.setGift
+    setGift: checkoutHelperBase.setGift,
+    handlePaymentInstrusment: handlePaymentInstrusment
 };

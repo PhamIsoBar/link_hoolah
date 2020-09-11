@@ -5,6 +5,17 @@ var server = require('server');
 var page = module.superModule;
 server.extend(page);
 
+server.prepend('SubmitPayment', function(req, res, next) { // eslint-disable-line
+    var BasketMgr = require('dw/order/BasketMgr');
+    var currentBasket = BasketMgr.getCurrentBasket();
+    var COHelpers = require('*/cartridge/scripts/checkout/checkoutHelpers');
+
+    var billingForm = server.forms.getForm('billing');
+    var paymentMethod = billingForm.paymentMethod.htmlValue;
+    COHelpers.handlePaymentInstrusment(currentBasket, paymentMethod);
+    next();
+});
+
 server.replace('PlaceOrder', server.middleware.https, function (req, res, next) {
     var BasketMgr = require('dw/order/BasketMgr');
     var OrderMgr = require('dw/order/OrderMgr');
