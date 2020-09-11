@@ -172,7 +172,7 @@ server.replace('PlaceOrder', server.middleware.https, function (req, res, next) 
         return next();
     }
     // Hoolah redirect
-    if (handlePaymentResult.isHoolah && handlePaymentResult.error === false) {
+    if (handlePaymentResult.isHoolah) {
         res.json({
             isHoolah: true,
             redirectUrl: handlePaymentResult.redirectLink

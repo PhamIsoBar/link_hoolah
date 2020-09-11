@@ -60,6 +60,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
     var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRequests');
     var OrderMgr = require('dw/order/OrderMgr');
     var order = OrderMgr.getOrder(orderNumber);
+    var StringUtils = require('dw/util/StringUtils');
     var hoolahURL;
     var result;
     if (order) {
@@ -85,7 +86,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
                 } else {
                     hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
                 }
-                hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
+                hoolahURL = StringUtils.format(hoolahURL, orderContextToken);
             }
         } else {
             result = JSON.parse(tokenResult.errorMessage);

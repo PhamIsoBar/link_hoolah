@@ -40,6 +40,7 @@ function Handle(args) {
 function Authorize(args) {
     var orderNo = args.OrderNo;
     var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRequests');
+    var StringUtils = require('dw/util/StringUtils');
     var order = args.Order;
     var hoolahURL;
     if (order) {
@@ -61,7 +62,7 @@ function Authorize(args) {
                 } else {
                     hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
                 }
-                hoolahURL += '?ORDER_CONTEXT_TOKEN=' + orderContextToken + '&platform=bespoke&version=1.0.1';
+                hoolahURL = StringUtils.format(hoolahURL, orderContextToken);
             }
         } else {
             return { error: true, isHoolah: true };
