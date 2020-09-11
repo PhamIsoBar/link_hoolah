@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<library xmlns="http://www.demandware.com/xml/impex/library/2006-10-31" library-id="RefArchSharedLibrary">
-    <content content-id="hoolah-payment">
-        <display-name xml:lang="x-default">Hoolah payment</display-name>
-        <online-flag>true</online-flag>
-        <searchable-flag>false</searchable-flag>
-        <custom-attributes>
-        <custom-attribute attribute-id="body" xml:lang="x-default">Hoolah Payment</custom-attribute>
-        </custom-attributes>
+<library xmlns="http://www.demandware.com/xml/impex/library/2006-10-31">
+  <content content-id="hoolah-payment">
+    <display-name xml:lang="x-default">Hoolah payment</display-name>
+    <online-flag>true</online-flag>
+    <searchable-flag>false</searchable-flag>
+    <custom-attributes>
+      <custom-attribute attribute-id="body" xml:lang="x-default">&lt;div style=&quot;text-align: center;&quot;&gt;
+        &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;102&quot; height=&quot;52&quot; viewBox=&quot;-270.8 371 102 52&quot; enable-background=&quot;new -270.8 371 102 52&quot;&gt;
+        &lt;path stroke=&quot;#B2B2B2&quot; stroke-width=&quot;2&quot; stroke-miterlimit=&quot;10&quot; d=&quot;M-182 404v16.8c0 .7-.4 1.2-1 1.2h-75.7c-.7 0-1.2-.6-1.2-1.2v-47.6c0-.7.6-1.2 1.2-1.2h75.7c.7 0 1 .6 1 1.2v21.8m-78-14h78m-17 18h27m-3.9-4.6l4.5 4.6-4.5 4.6&quot; fill=&quot;none&quot; /&gt;
+        &lt;circle fill=&quot;#B2B2B2&quot; cx=&quot;-255.5&quot; cy=&quot;376.5&quot; r=&quot;1.5&quot; /&gt;
+        &lt;circle fill=&quot;#B2B2B2&quot; cx=&quot;-250.5&quot; cy=&quot;376.5&quot; r=&quot;1.5&quot; /&gt;
+        &lt;circle fill=&quot;#B2B2B2&quot; cx=&quot;-245.5&quot; cy=&quot;376.5&quot; r=&quot;1.5&quot; /&gt;
+        &lt;/svg&gt;
+        &lt;/div&gt;
+        &lt;p style=&quot;text-align: center;&quot;&gt;After clicking &amp;ldquo;Complete order&amp;rdquo;, you will be redirected to hoolah to complete your purchase securely&lt;/p&gt;</custom-attribute>
+      </custom-attributes>
     </content>
 </library>
