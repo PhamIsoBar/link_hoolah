@@ -1,0 +1,37 @@
+{
+    "step-types": {
+        "script-module-step": [
+            {
+                "@type-id": "custom.RunRefundRequest",
+                "module": "int_hoolah_core/cartridge/scripts/jobs/RefundRequest",
+                "function": "execute",
+                "parameters": {
+                    "parameters": [
+                        {
+                            "@name": "limitRefundCall",
+                            "@type": "double",
+                            "@required": "true",
+                            "description": "The limit order for one call"
+                        }
+                    ]
+                },
+                "status-codes": {
+                    "status": [
+                        {
+                            "@code": "ERROR",
+                            "description": "Used when an error occurred."
+                        },
+                        {
+                            "@code": "OK",
+                            "description": "Used when everything went well."
+                        },
+                        {
+                            "@code": "WARN",
+                            "description": "Used when small, but acceptable problems occurred."
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

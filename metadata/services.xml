@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns="http://www.demandware.com/xml/impex/services/2014-09-26">
+    <service-credential service-credential-id="hoolah_auth_malay_cred">
+        <url>https://demo-merchant-service.demo-hoolah.co/merchant/auth/login</url>
+        <user-id>de7245a6-9d5b-4724-a539-d317465be95a</user-id>
+        <password masked="true">********</password>
+    </service-credential>
+
+    <service-credential service-credential-id="hoolah_auth_sing_cred">
+        <url>https://demo-merchant-service.demo-hoolah.co/merchant/auth/login</url>
+        <user-id>64896d47-f265-4c40-ad20-1196dbf0ec87</user-id>
+        <password masked="true">********</password>
+    </service-credential>
+
+    <service-credential service-credential-id="hoolah_full_refund_cred">
+        <url>https://demo-merchant-service.demo-hoolah.co/merchant/order/{0}/full-refund</url>
+        <user-id>thao.hoang@isobar.com</user-id>
+        <password masked="true">********</password>
+    </service-credential>
+
+    <service-credential service-credential-id="hoolah_init_order_cred">
+        <url>https://demo-merchant-service.demo-hoolah.co/merchant/order/initiate</url>
+        <user-id/>
+        <password masked="true">********</password>
+    </service-credential>
+
+    <service-credential service-credential-id="hoolah_partial_refund_cred">
+        <url>https://demo-merchant-service.demo-hoolah.co/merchant/order/{0}/partial-refund</url>
+        <user-id>thao.hoang@isobar.com</user-id>
+        <password masked="true">********</password>
+    </service-credential>
+
+    <service-profile service-profile-id="hoolah_auth_malay_prof">
+        <timeout-millis>60000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>false</cb-enabled>
+        <cb-calls>10</cb-calls>
+        <cb-millis>5000</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="hoolah_auth_sing_prof">
+        <timeout-millis>60000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>false</cb-enabled>
+        <cb-calls>10</cb-calls>
+        <cb-millis>5000</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="hoolah_full_refund_prof">
+        <timeout-millis>60000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>false</cb-enabled>
+        <cb-calls>10</cb-calls>
+        <cb-millis>5000</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="hoolah_init_order_prof">
+        <timeout-millis>60000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>false</cb-enabled>
+        <cb-calls>10</cb-calls>
+        <cb-millis>5000</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="hoolah_partial_refund_prof">
+        <timeout-millis>60000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>true</cb-enabled>
+        <cb-calls>10</cb-calls>
+        <cb-millis>5000</cb-millis>
+    </service-profile>
+
+    <service service-id="hoolah_auth_malay">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>hoolah_auth_malay</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hoolah_auth_malay_prof</profile-id>
+        <credential-id>hoolah_auth_malay_cred</credential-id>
+    </service>
+
+    <service service-id="hoolah_auth_sing">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>hoolah_auth_sing</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hoolah_auth_sing_prof</profile-id>
+        <credential-id>hoolah_auth_sing_cred</credential-id>
+    </service>
+
+    <service service-id="hoolah_full_refund">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>hoolah_full_refund</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hoolah_full_refund_prof</profile-id>
+        <credential-id>hoolah_full_refund_cred</credential-id>
+    </service>
+
+    <service service-id="hoolah_init_order">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>hoolah_init_order</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hoolah_init_order_prof</profile-id>
+        <credential-id>hoolah_init_order_cred</credential-id>
+    </service>
+
+    <service service-id="hoolah_partial_refund">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>hoolah_partial_refund</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>hoolah_partial_refund_prof</profile-id>
+        <credential-id>hoolah_partial_refund_cred</credential-id>
+    </service>
+
+</services>

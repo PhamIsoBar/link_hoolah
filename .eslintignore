@@ -1,0 +1,7 @@
+storefront-reference-architecture/
+sitegenesis/
+coverage/
+doc/
+bin/
+test/
+cartridges/int_hoolah_sfra/cartridge/static

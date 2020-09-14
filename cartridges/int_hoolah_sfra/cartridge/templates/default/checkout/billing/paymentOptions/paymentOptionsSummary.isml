@@ -1,0 +1,12 @@
+<div class="payment-details">
+    <isset name="isHoolahEnabled" value="${dw.system.Site.getCurrent().getCustomPreferenceValue('enableHoolah')}" scope="page" />
+    <isloop items="${pdict.order.billing.payment.selectedPaymentInstruments}" var="payment">
+        <isif condition="${payment.paymentMethod === 'CREDIT_CARD'}">
+            <isinclude template="checkout/billing/paymentOptions/creditCardSummary" />
+        <iselseif condition="${payment.paymentMethod === 'Hoolah' && isHoolahEnabled}" />
+            <div class="credit-card-type">
+                <span>${payment.paymentMethod}</span>
+            </div>
+        </isif>
+    </isloop>
+</div>
