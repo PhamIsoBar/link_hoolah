@@ -141,7 +141,7 @@
         </iscomment>
         <div class="payment-method <isif condition="${!empty(pdict.selectedPaymentID) && pdict.selectedPaymentID=='Hoolah'}">payment-method-expanded</isif>" data-method="Hoolah">
             <!-- Your custom payment method implementation goes here. -->
-            <iscontentasset aid="hoolah-payment" />
+            <iscontentasset aid="hoolah-method-callout" />
         </div>
     </fieldset>
 <iselse/>
