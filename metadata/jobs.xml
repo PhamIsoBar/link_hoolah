@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+    <job job-id="RefundRequestHoolah" priority="0">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="SiteGenesis"/>
+            <step step-id="RefundRequestHoolah" type="custom.RunRefundRequest" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="limitRefundCall">1</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2020-09-05Z</date>
+                <time>14:13:26.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+</jobs>
