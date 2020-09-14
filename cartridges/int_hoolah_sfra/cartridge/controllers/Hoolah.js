@@ -34,7 +34,7 @@ server.post('HandleCallback', function (req, res, next) {
     }
 });
 
-server.get('CloseUrl', function (req, res) {
+server.get('CloseUrl', function (req, res, next) {
     var orderID = req.querystring.orderID;
     var OrderMgr = require('dw/order/OrderMgr');
     var Transaction = require('dw/system/Transaction');
@@ -47,6 +47,7 @@ server.get('CloseUrl', function (req, res) {
         OrderMgr.failOrder(order, true);
     });
     res.redirect(URLUtils.url('Checkout-Begin'));
+    next();
 });
 
 module.exports = server.exports();
