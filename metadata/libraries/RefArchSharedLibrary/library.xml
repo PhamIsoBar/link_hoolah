@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <library xmlns="http://www.demandware.com/xml/impex/library/2006-10-31" library-id="RefArchSharedLibrary">
-    <content content-id="hoolah-payment">
+    <content content-id="hoolah-method-callout">
         <display-name xml:lang="x-default">Hoolah payment</display-name>
         <online-flag>true</online-flag>
         <searchable-flag>false</searchable-flag>
