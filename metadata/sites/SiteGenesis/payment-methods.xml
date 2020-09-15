@@ -4,5 +4,9 @@
         <name xml:lang="x-default">Hoolah</name>
         <enabled-flag>true</enabled-flag>
         <processor-id>Hoolah</processor-id>
+        <customer-groups>
+            <customer-group group-id="Customer SG - MY"/>
+        </customer-groups>
+    </payment-method>oolah</processor-id>
     </payment-method>
 </payment-settings>
