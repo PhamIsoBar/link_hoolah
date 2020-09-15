@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customer-groups xmlns="http://www.demandware.com/xml/impex/customergroup/2007-06-30">
+    <customer-group group-id="Customer SG - MY">
+        <description>Customer Group who is from MY or SG can see payment method Hoolah in Checkout Billing</description>
+        <membership-rule>
+            <included-customers>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>request.geolocation.countryCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>SG</string>
+                    </condition>
+                </condition-group>
+                <condition-group match-mode="all">
+                    <condition>
+                        <attribute-path>request.geolocation.countryCode</attribute-path>
+                        <operator>is-equal</operator>
+                        <string>MY</string>
+                    </condition>
+                </condition-group>
+            </included-customers>
+        </membership-rule>
+        <custom-attributes/>
+    </customer-group>
+</customer-groups>
