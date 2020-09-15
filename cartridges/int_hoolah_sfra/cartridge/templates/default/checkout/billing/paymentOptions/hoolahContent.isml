@@ -6,6 +6,6 @@
                name="${pdict.forms.billingForm.paymentMethod.htmlName}"
                value="Hoolah"
         >
-        <iscontentasset aid="hoolah-payment" />
+        <iscontentasset aid="hoolah-method-callout" />
     </fieldset>
 </div>
