@@ -35,6 +35,7 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
 /**
  * Attempts to place the order
  * @param {Object} args - The parameter of job
+ * @return {Object} Job status
  */
 function execute(args) {
     try {

@@ -79,6 +79,7 @@ function callInitOrderService(serviceID, data, token) {
  * @param {string} serviceID - The service ID
  * @param {Object} data - Data of order
  * @param {string} token - Token when init order
+ * @param {string} orderUUID - Order uuid from Hoolah
  * @returns {Object} an result object
  */
 function callRefundService(serviceID, data, token, orderUUID) {

@@ -83,6 +83,9 @@ function handlePayments(order) {
     return {};
 }
 
+/**
+ * Clear data form checkout
+ */
 function clearForms() {
     // Clears all forms used in the checkout process.
     session.forms.singleshipping.clearFormElement();

@@ -25,6 +25,7 @@ var Cart = app.getModel('Cart');
  * creation. If a nonregistered customer has checked out, the confirmation page
  * provides a "Create Account" form. This function handles the
  * account creation.
+ * @param {Object} order - current order object
  */
 function showConfirmation(order) {
     if (!customer.authenticated) {
@@ -62,7 +63,7 @@ function start(context) {
     if (!COBilling.ValidatePayment(cart)) {
         COBilling.Start();
         return;
-    } else {
+    } else { //eslint-disable-line
         Transaction.wrap(function () {
             cart.calculate();
         });
