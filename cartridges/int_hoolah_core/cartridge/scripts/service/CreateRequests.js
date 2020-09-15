@@ -18,13 +18,10 @@ var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelpe
  */
 function createGetTokenRequest(countryCode) {
     var result;
-    if (countryCode === 'SG') {
-        result = initServices.callGetTokenService(HoolahConstants.SING_AUTH_SERVICE);
-    } else if (countryCode === 'MY') {
+    if (countryCode === 'MY') {
         result = initServices.callGetTokenService(HoolahConstants.MALAY_AUTH_SERVICE);
     } else {
-        result.error = true;
-        result.message = 'Payment not support for this country';
+        result = initServices.callGetTokenService(HoolahConstants.SING_AUTH_SERVICE);
     }
     return result;
 }

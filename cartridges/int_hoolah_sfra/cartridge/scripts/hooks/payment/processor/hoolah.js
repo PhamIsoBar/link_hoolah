@@ -66,7 +66,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
         var countryCode = order.billingAddress.countryCode.value;
         var tokenResult = createRequests.createGetTokenRequest(countryCode);
         if (tokenResult.ok) {
-            var token = createRequests.createGetTokenRequest(countryCode).object.token;
+            var token = tokenResult.object.token;
             var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
             if (!initOrderHoolahResult.ok) {
                 result = JSON.parse(initOrderHoolahResult.errorMessage);
