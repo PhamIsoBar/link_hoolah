@@ -12,9 +12,15 @@
         "global-require": "off",
         "no-shadow": ["error", { "allow": ["err", "callback"]}],
         "max-len": "off",
-        "no-new-object": "off"
+        "no-new-object": "off",
+        "new-cap": "off",
+        "no-param-reassign": "off"
     },
     "globals": {
-        "$": true
+        "$": true,
+        "request": true,
+        "session": true,
+        "response": true,
+        "customer": true
     }
 }

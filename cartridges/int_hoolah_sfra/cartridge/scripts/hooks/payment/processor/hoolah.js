@@ -24,21 +24,19 @@ function createToken() {
  */
 function Handle(basket, paymentInformation, paymentMethodID, req) { //eslint-disable-line
     var result = false;
-    if (paymentInformation.country === 'SG' || paymentInformation.country === 'MY') {
-        var currentBasket = basket;
-        Transaction.wrap(function () {
-            var paymentInstruments = currentBasket.getPaymentInstruments();
+    var currentBasket = basket;
+    Transaction.wrap(function () {
+        var paymentInstruments = currentBasket.getPaymentInstruments();
 
-            collections.forEach(paymentInstruments, function (item) {
-                currentBasket.removePaymentInstrument(item);
-            });
-
-            currentBasket.createPaymentInstrument(
-                'Hoolah', currentBasket.totalGrossPrice
-            );
+        collections.forEach(paymentInstruments, function (item) {
+            currentBasket.removePaymentInstrument(item);
         });
-        result = true;
-    }
+
+        currentBasket.createPaymentInstrument(
+            'Hoolah', currentBasket.totalGrossPrice
+        );
+    });
+    result = true;
     return result;
 }
 
@@ -63,11 +61,12 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
     var StringUtils = require('dw/util/StringUtils');
     var hoolahURL;
     var result;
+    var initOrderHoolah;
     if (order) {
         var countryCode = order.billingAddress.countryCode.value;
         var tokenResult = createRequests.createGetTokenRequest(countryCode);
         if (tokenResult.ok) {
-            var token = createRequests.createGetTokenRequest(countryCode).object.token;
+            var token = tokenResult.object.token;
             var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
             if (!initOrderHoolahResult.ok) {
                 result = JSON.parse(initOrderHoolahResult.errorMessage);

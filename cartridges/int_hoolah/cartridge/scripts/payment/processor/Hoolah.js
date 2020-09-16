@@ -51,7 +51,7 @@ function Authorize(args) {
             var initOrderHoolahResult = createRequests.createInitOrderRequest(order, token);
             if (!initOrderHoolahResult.ok) {
                 return { error: true, isHoolah: true };
-            } else {
+            } else {// eslint-disable-line
                 var initOrderHoolah = createRequests.createInitOrderRequest(order, token).object;
                 var orderContextToken = initOrderHoolah.orderContextToken;
                 Transaction.wrap(function () {
