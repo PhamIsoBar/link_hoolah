@@ -53,16 +53,16 @@ function Authorize(args) {
                 return { error: true, isHoolah: true };
             } else {// eslint-disable-line
                 var initOrderHoolah = createRequests.createInitOrderRequest(order, token).object;
-                var orderContextToken = initOrderHoolah.orderContextToken;
+                var hoolahOrderToken = initOrderHoolah.hoolahOrderToken;
                 Transaction.wrap(function () {
-                    order.custom.orderContextToken = orderContextToken;
+                    order.custom.hoolahOrderToken = hoolahOrderToken;
                 });
                 if (countryCode === 'SG') {
-                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahSGRedirectURL');
                 } else {
-                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoohlahMLRedirectURL');
                 }
-                hoolahURL = StringUtils.format(hoolahURL, orderContextToken);
+                hoolahURL = StringUtils.format(hoolahURL, hoolahOrderToken);
             }
         } else {
             return { error: true, isHoolah: true };

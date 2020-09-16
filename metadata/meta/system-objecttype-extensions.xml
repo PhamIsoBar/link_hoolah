@@ -2,7 +2,7 @@
 <metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
     <type-extension type-id="Order">
         <custom-attribute-definitions>
-            <attribute-definition attribute-id="orderContextToken">
+            <attribute-definition attribute-id="hoolahOrderToken">
                 <display-name xml:lang="x-default">Hoolah order context token</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
@@ -16,7 +16,7 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="orderHoolahUUID">
+            <attribute-definition attribute-id="hoolahOrderUUID">
                 <display-name xml:lang="x-default">Hoolah order UUID</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
@@ -58,34 +58,12 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="refundMessage">
-                <display-name xml:lang="x-default">Hoolah refund message</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="refundTransactionFeeAmount">
-                <display-name xml:lang="x-default">Hoolah refund transaction fee amount</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="refundMerchantFeeAmount">
-                <display-name xml:lang="x-default">Hoolah refund merchant fee amount</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-        </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="Hoolah Payment">
                 <display-name xml:lang="x-default">Hoolah Payment Attribute</display-name>
-                <attribute attribute-id="orderContextToken"/>
+                <attribute attribute-id="hoolahOrderToken"/>
                 <attribute attribute-id="cartId"/>
-                <attribute attribute-id="orderHoolahUUID"/>
+                <attribute attribute-id="hoolahOrderUUID"/>
                 <attribute attribute-id="failureCode"/>
                 <attribute attribute-id="failureMessage"/>
             </attribute-group>
@@ -94,9 +72,6 @@
                 <attribute attribute-id="refundRequestId"/>
                 <attribute attribute-id="refundCode"/>
                 <attribute attribute-id="refundStatus"/>
-                <attribute attribute-id="refundMessage"/>
-                <attribute attribute-id="refundTransactionFeeAmount"/>
-                <attribute attribute-id="refundMerchantFeeAmount"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
@@ -108,14 +83,14 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="hoolahLandingPageSing">
-                <display-name xml:lang="x-default">Hoolah Singapore Landing Page</display-name>
+            <attribute-definition attribute-id="hoolahSGRedirectURL">
+                <display-name xml:lang="x-default">Hoolah Singapore Redirect URL</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="hoolahLandingPageMalay">
-                <display-name xml:lang="x-default">Hoolah Malaysia Landing Page</display-name>
+            <attribute-definition attribute-id="hoohlahMLRedirectURL">
+                <display-name xml:lang="x-default">Hoolah Malaysia Redirect URL</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
@@ -125,8 +100,8 @@
             <attribute-group group-id="Hoolah Payment">
                 <display-name xml:lang="x-default">Hoolah Payment Config</display-name>
                 <attribute attribute-id="enableHoolah"/>
-                <attribute attribute-id="hoolahLandingPageSing"/>
-                <attribute attribute-id="hoolahLandingPageMalay"/>
+                <attribute attribute-id="hoolahSGRedirectURL"/>
+                <attribute attribute-id="hoohlahMLRedirectURL"/>
             </attribute-group>
         </group-definitions>
     </type-extension>

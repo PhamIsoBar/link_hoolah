@@ -11,7 +11,7 @@ server.post('HandleCallback', function (req, res, next) {
     var OrderMgr = require('dw/order/OrderMgr');
     var Transaction = require('dw/system/Transaction');
     var order = OrderMgr.searchOrder(
-        'custom.orderContextToken={0}',
+        'custom.hoolahOrderToken={0}',
         responseData.order_context_token
     );
     if (responseData.order_status === 'SUCCESS') {
@@ -20,7 +20,7 @@ server.post('HandleCallback', function (req, res, next) {
             HoolahHelper.placeOrder(order);
             order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_PAID);
             order.custom.cartId = responseData.cart_id;
-            order.custom.orderHoolahUUID = responseData.order_uuid;
+            order.custom.hoolahOrderUUID = responseData.order_uuid;
         });
     } else {
         // Fail order and save error information
