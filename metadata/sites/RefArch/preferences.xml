@@ -4,14 +4,14 @@
         <all-instances/>
         <development>
             <preference preference-id="enableHoolah">true</preference>
-            <preference preference-id="hoolahLandingPageMalay">https://my.demo-js.demo-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
-            <preference preference-id="hoolahLandingPageSing">https://demo-js.demo-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
+            <preference preference-id="hoohlahMLRedirectURL">https://my.demo-js.demo-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
+            <preference preference-id="hoolahSGRedirectURL">https://demo-js.demo-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
         </development>
         <staging/>
         <production>
-			<preference preference-id="enableHoolah">true</preference>
-            <preference preference-id="hoolahLandingPageMalay">https://my.js.secure-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
-            <preference preference-id="hoolahLandingPageSing">https://js.secure-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
-		</production>
+            <preference preference-id="enableHoolah">true</preference>
+            <preference preference-id="hoohlahMLRedirectURL">https://my.js.secure-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
+            <preference preference-id="hoolahSGRedirectURL">https://js.secure-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
+        </production>
     </custom-preferences>
 </preferences>

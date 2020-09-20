@@ -6,10 +6,11 @@
 *
 *
 /*********************************************************************************/
-var HoolahConstants = require('int_hoolah_core/cartridge/scripts/common/HoolahConstants');
+var Site = require('dw/system/Site');
+var StringUtils = require('dw/util/StringUtils');
 var initServices = require('int_hoolah_core/cartridge/scripts/service/init/httpServices');
 var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelper');
-
+var hoolahEndPointURL = Site.current.getCustomPreferenceValue('hoolahEndPointURL');
 
 /**
  * Call service to get token from Hoolah
@@ -17,13 +18,9 @@ var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelpe
  * @returns {Object} result - an result object
  */
 function createGetTokenRequest(countryCode) {
-    var result;
-    if (countryCode === 'MY') {
-        result = initServices.callGetTokenService(HoolahConstants.MALAY_AUTH_SERVICE);
-    } else {
-        result = initServices.callGetTokenService(HoolahConstants.SING_AUTH_SERVICE);
-    }
-    return result;
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.auth);
+
+    return initServices.callGetTokenService(initServices.serviceIDs.auth, countryCode, urlPath);
 }
 
 /**
@@ -34,7 +31,8 @@ function createGetTokenRequest(countryCode) {
  */
 function createInitOrderRequest(order, token) {
     var orderData = HoolahHelper.getOrderJSON(order);
-    return initServices.callInitOrderService(HoolahConstants.INIT_ORDER_SERVICE, orderData, token);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.post.initOrder);
+    return initServices.orderPostService(initServices.serviceIDs.order, orderData, token, urlPath);
 }
 
 /**
@@ -48,7 +46,8 @@ function createFullRefundRequest(requestObject, token) {
     var requestData = {
         description: requestObject.custom.description
     };
-    return initServices.callRefundService(HoolahConstants.FULL_REFUND_SERVICE, requestData, token, orderUUID);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.post.refundFull, orderUUID));
+    return initServices.callRefundService(initServices.serviceIDs.order, requestData, token, urlPath);
 }
 
 /**
@@ -75,7 +74,8 @@ function createPartialRefundRequest(requestObject, token) {
     if (items.length > 0) {
         requestData.items = items;
     }
-    return initServices.callRefundService(HoolahConstants.PARTIAL_REFUND_SERVICE, requestData, token, orderUUID);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.post.refundPartial, orderUUID));
+    return initServices.callRefundService(initServices.serviceIDs.order, requestData, token, urlPath);
 }
 
 /** Exported functions **/

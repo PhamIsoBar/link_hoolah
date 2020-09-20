@@ -23,7 +23,7 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
     Transaction.wrap(function () {
         order.custom.refundRequestId = refundResult.requestId;
         order.custom.refundCode = refundResult.code;
-        order.custom.refundStatus = refundResult.status;
+        order.custom.hoolahOrderRefundStatus = refundResult.status;
         if (refundResult.status === 'ACCEPTED') {
             CustomObjectMgr.remove(refundRequest);
         } else {
@@ -47,7 +47,7 @@ function execute(args) {
             var refundRequest = allRefundRequest.next();
             var hoolahOrderUUID = refundRequest.custom['order-uuid'];
             var orderRefund = OrderMgr.searchOrder(
-                'custom.orderHoolahUUID={0}',
+                'custom.hoolahOrderUUID={0}',
                 hoolahOrderUUID
             );
             if (orderRefund && (orderRefund.status.value === Order.ORDER_STATUS_OPEN || orderRefund.status.value === Order.ORDER_STATUS_NEW)) {
