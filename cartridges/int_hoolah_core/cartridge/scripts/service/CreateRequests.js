@@ -32,7 +32,7 @@ function createGetTokenRequest(countryCode) {
 function createInitOrderRequest(order, token) {
     var orderData = HoolahHelper.getOrderJSON(order);
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.post.initOrder);
-    return initServices.orderPostService(initServices.serviceIDs.order, orderData, token, urlPath);
+    return initServices.handleOrderService(initServices.serviceIDs.order, orderData, token, urlPath);
 }
 
 /**

@@ -7,13 +7,12 @@ var StringUtils = require('dw/util/StringUtils');
 var Site = require('dw/system/Site');
 
 const serviceIDs = {
-    auth: 'hoolah.http.payment.auth',
-    order: 'hoolah.http.payment.order'
+    id: Site.current.getCustomPreferenceValue('hoolahServicePrefix'),
 };
 
 const servicePaths = {
     auth:'auth/login',
-    post: {
+    order: {
         initOrder: 'order/initiate',
         refundFull: 'order/{0}/full-refund',
         refundPartial: 'order/{0}/partial-refund'
@@ -21,7 +20,8 @@ const servicePaths = {
 };
 
 function setCredentialID(svc, countryCode) {
-    var credentialID = 'hoolah-auth-cre-' + countryCode;
+    var hoolahCredentialPrefix = Site.current.getCustomPreferenceValue('hoolahCredentialPrefix');
+    var credentialID = hoolahCredentialPrefix + countryCode;
     try {
         svc.setCredentialID(credentialID);
         return true;
@@ -75,7 +75,7 @@ function callGetTokenService(serviceID, countryCode, urlPath) {
  * @param {string} token - Token when init order
  * @returns {Object} an result object
  */
-function orderPostService(serviceID, data, token, urlPath) {
+function handleOrderService(serviceID, data, token, urlPath) {
     var service;
     var result;
     try {
@@ -107,5 +107,5 @@ module.exports = {
     serviceIDs: serviceIDs,
     servicePaths: servicePaths,
     callGetTokenService: callGetTokenService,
-    orderPostService: orderPostService,
+    handleOrderService: handleOrderService,
 };

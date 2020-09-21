@@ -15,18 +15,25 @@ var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRe
 function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-disable-line
     var token = createRequests.createGetTokenRequest(order.billingAddress.countryCode.value).object.token;
     var refundResult;
+    var isFullRefund = true;
     if (refundRequest.custom.amount > 0) {
+        isFullRefund = false;
         refundResult = createRequests.createPartialRefundRequest(refundRequest, token).object;
     } else {
         refundResult = createRequests.createFullRefundRequest(refundRequest, token).object;
     }
     Transaction.wrap(function () {
-        order.custom.refundRequestId = refundResult.requestId;
-        order.custom.refundCode = refundResult.code;
-        order.custom.hoolahOrderRefundStatus = refundResult.status;
+        order.custom.hoolahOrderRefundRequestID = refundResult.hoolahOrderRefundRequestID;
+        if (isFullRefund) {
+            order.custom.hoolahOrderRefundStatus = refundResult.status;
+        } else {
+            order.custom.hoolahOrderPartialRefundStatus = refundResult.status;
+            order.custom.hoolahPartialRefundAmount = refundRequest.custom.amount;
+        }
         if (refundResult.status === 'ACCEPTED') {
             CustomObjectMgr.remove(refundRequest);
         } else {
+            refundRequest.isError = true
             jobStatus = false;
         }
     });
@@ -39,7 +46,7 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
  */
 function execute(args) {
     try {
-        var allRefundRequest = CustomObjectMgr.getAllCustomObjects('HoolahRefundRequest');
+        var allRefundRequest = CustomObjectMgr.queryCustomObjects('HoolahRefundRequest', 'custom.isError != {0}', true);
         var limitRefundCall = args.limitRefundCall > allRefundRequest.count ? allRefundRequest.count : args.limitRefundCall;
         var jobStatus = true;
         var count = 0;
