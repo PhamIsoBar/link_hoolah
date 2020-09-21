@@ -53,9 +53,10 @@ function Authorize(args) {
                 return { error: true, isHoolah: true };
             } else {// eslint-disable-line
                 var initOrderHoolah = createRequests.createInitOrderRequest(order, token).object;
-                var hoolahOrderToken = initOrderHoolah.hoolahOrderToken;
+                var hoolahOrderToken = initOrderHoolah.orderContextToken;
                 Transaction.wrap(function () {
                     order.custom.hoolahOrderToken = hoolahOrderToken;
+                    order.custom.hoolahOrderStatus = 'INITIATED';
                 });
                 if (countryCode === 'SG') {
                     hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahSGRedirectURL');

@@ -51,6 +51,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hoolahOrderRefundRequestID">
+                <display-name xml:lang="x-default">Hoolah refund request ID</display-name>
+                <type>set-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="hoolahOrderPartialRefundStatus">
                 <display-name xml:lang="x-default">Hoolah partial refund status</display-name>
                 <type>string</type>
@@ -70,6 +77,7 @@
             <attribute-group group-id="Hoolah Payment">
                 <display-name xml:lang="x-default">Hoolah Payment Attribute</display-name>
                 <attribute attribute-id="hoolahOrderToken"/>
+                <attribute attribute-id="hoolahOrderStatus"/>
                 <attribute attribute-id="hoolahCartID"/>
                 <attribute attribute-id="hoolahOrderUUID"/>
                 <attribute attribute-id="hoolahFailureCode"/>
@@ -77,6 +85,7 @@
             </attribute-group>
             <attribute-group group-id="Hoolah Refund">
                 <display-name xml:lang="x-default">Hoolah Refund Attribute</display-name>
+                <attribute attribute-id="hoolahOrderRefundRequestID"/>
                 <attribute attribute-id="hoolahOrderRefundStatus"/>
                 <attribute attribute-id="hoolahOrderPartialRefundStatus"/>
                 <attribute attribute-id="hoolahPartialRefundAmount"/>
@@ -97,18 +106,6 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="hoolahAuthServicePrefix">
-                <display-name xml:lang="x-default">Hoolah Auth Service Prefix</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahOrderServicePrefix">
-                <display-name xml:lang="x-default">Hoolah Order Service Perfix</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
             <attribute-definition attribute-id="hoolahSGRedirectURL">
                 <display-name xml:lang="x-default">Hoolah Singapore redirect URL</display-name>
                 <type>string</type>
@@ -121,14 +118,26 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
+            <attribute-definition attribute-id="hoolahCredentialPrefix">
+                <display-name xml:lang="x-default">Hoolah Credential Prefix</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahServicePrefix">
+                <display-name xml:lang="x-default">Hoolah Service Prefix</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="Hoolah Payment">
                 <display-name xml:lang="x-default">Hoolah Payment Config</display-name>
                 <attribute attribute-id="enableHoolah"/>
                 <attribute attribute-id="hoolahEndPointURL"/>
-                <attribute attribute-id="hoolahAuthServicePrefix"/>
-                <attribute attribute-id="hoolahOrderServicePrefix"/>
+                <attribute attribute-id="hoolahServicePrefix"/>
+                <attribute attribute-id="hoolahCredentialPrefix"/>
                 <attribute attribute-id="hoolahSGRedirectURL"/>
                 <attribute attribute-id="hoohlahMLRedirectURL"/>
             </attribute-group>

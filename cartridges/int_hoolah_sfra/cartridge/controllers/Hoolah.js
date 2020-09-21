@@ -21,6 +21,7 @@ server.post('HandleCallback', function (req, res, next) {
             order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_PAID);
             order.custom.hoolahCartID = responseData.cart_id;
             order.custom.hoolahOrderUUID = responseData.order_uuid;
+            order.custom.hoolahOrderStatus = 'APPROVED';
         });
     } else {
         // Fail order and save error information

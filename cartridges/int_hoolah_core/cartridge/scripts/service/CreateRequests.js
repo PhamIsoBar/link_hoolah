@@ -10,7 +10,8 @@ var Site = require('dw/system/Site');
 var StringUtils = require('dw/util/StringUtils');
 var initServices = require('int_hoolah_core/cartridge/scripts/service/init/httpServices');
 var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelper');
-var hoolahEndPointURL = Site.current.getCustomPreferenceValue('hoolahEndPointURL');
+var hoolahEndPointURL = Site.current.ID === 'Sites-Site' ? 'https://demo-merchant-service.demo-hoolah.co/merchant' : Site.current.getCustomPreferenceValue('hoolahEndPointURL');
+// var hoolahEndPointURL = Site.current.getCustomPreferenceValue('hoolahEndPointURL');
 
 /**
  * Call service to get token from Hoolah
@@ -20,7 +21,7 @@ var hoolahEndPointURL = Site.current.getCustomPreferenceValue('hoolahEndPointURL
 function createGetTokenRequest(countryCode) {
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.auth);
 
-    return initServices.callGetTokenService(initServices.serviceIDs.auth, countryCode, urlPath);
+    return initServices.callGetTokenService(initServices.serviceIDs.id, countryCode, urlPath);
 }
 
 /**
@@ -31,8 +32,8 @@ function createGetTokenRequest(countryCode) {
  */
 function createInitOrderRequest(order, token) {
     var orderData = HoolahHelper.getOrderJSON(order);
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.post.initOrder);
-    return initServices.handleOrderService(initServices.serviceIDs.order, orderData, token, urlPath);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.order.initOrder);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, orderData);
 }
 
 /**
@@ -42,12 +43,12 @@ function createInitOrderRequest(order, token) {
  * @returns {Object} - result - an result object
  */
 function createFullRefundRequest(requestObject, token) {
-    var orderUUID = requestObject.custom['order-uuid'];
+    var orderUUID = requestObject.custom.orderUUID;
     var requestData = {
-        description: requestObject.custom.description
+        description: requestObject.custom.orderResource
     };
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.post.refundFull, orderUUID));
-    return initServices.callRefundService(initServices.serviceIDs.order, requestData, token, urlPath);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refundFull, orderUUID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData);
 }
 
 /**
@@ -57,14 +58,14 @@ function createFullRefundRequest(requestObject, token) {
  * @returns {Object} - result - an result object
  */
 function createPartialRefundRequest(requestObject, token) {
-    var orderUUID = requestObject.custom['order-uuid'];
+    var orderUUID = requestObject.custom.orderUUID;
     var items = [];
     var requestData = {
-        description: requestObject.custom.description,
-        amount: requestObject.custom.amount
+        description: requestObject.custom.orderResource,
+        amount: requestObject.custom.orderRefundAmount
     };
-    if (requestObject.custom.items.length > 0) {
-        var itemRefund = requestObject.custom.items;
+    if (requestObject.custom.orderRefundItems.length > 0) {
+        var itemRefund = requestObject.custom.orderRefundItems;
         for (var i = 0; i < itemRefund.length; i++) {
             items.push({
                 sku: itemRefund[i]
@@ -74,8 +75,41 @@ function createPartialRefundRequest(requestObject, token) {
     if (items.length > 0) {
         requestData.items = items;
     }
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.post.refundPartial, orderUUID));
-    return initServices.callRefundService(initServices.serviceIDs.order, requestData, token, urlPath);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refundPartial, orderUUID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData);
+}
+
+/**
+ * Call service to get order information from Hoolah
+ * @param {string} orderUUID - Order Hoolah UUID
+ * @param {string} token - Token to send request
+ * @returns {Object} - result - an result object
+ */
+function getOrderInfoRequest(orderUUID, token) {
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderInfo, orderUUID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath);
+}
+
+/**
+ * Call service to get full refund information from Hoolah
+ * @param {string} token - Token to send request
+ * @param {string} requestID - Request ID
+ * @returns {Object} - result - an result object
+ */
+function getFullRefundInfoRequest(token, requestID) {
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderFullRefundInfo, requestID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath);
+}
+
+/**
+ * Call service to get full refund information from Hoolah
+ * @param {string} token - Token to send request
+ * @param {string} requestID - request ID to get info
+ * @returns {Object} - result - an result object
+ */
+function getPartialRefundInfoRequest(token, requestID) {
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderPartialRefundInfo, requestID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath);
 }
 
 /** Exported functions **/
@@ -83,5 +117,8 @@ module.exports = {
     createGetTokenRequest: createGetTokenRequest,
     createInitOrderRequest: createInitOrderRequest,
     createFullRefundRequest: createFullRefundRequest,
-    createPartialRefundRequest: createPartialRefundRequest
+    createPartialRefundRequest: createPartialRefundRequest,
+    getOrderInfoRequest: getOrderInfoRequest,
+    getFullRefundInfoRequest: getFullRefundInfoRequest,
+    getPartialRefundInfoRequest: getPartialRefundInfoRequest
 };

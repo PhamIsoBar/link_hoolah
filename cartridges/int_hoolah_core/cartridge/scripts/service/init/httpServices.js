@@ -1,26 +1,34 @@
+/* eslint-env es6 */
 /**
  * This script provides functions init many requests call to Hoolah
  */
 
 var LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
-var StringUtils = require('dw/util/StringUtils');
 var Site = require('dw/system/Site');
 
 const serviceIDs = {
-    id: Site.current.getCustomPreferenceValue('hoolahServicePrefix'),
+    id: Site.current.ID !== 'Sites-Site' ? 'hoolah.http.payment' : Site.current.getCustomPreferenceValue('hoolahServicePrefix')
 };
 
 const servicePaths = {
-    auth:'auth/login',
+    auth: 'auth/login',
     order: {
         initOrder: 'order/initiate',
         refundFull: 'order/{0}/full-refund',
-        refundPartial: 'order/{0}/partial-refund'
+        refundPartial: 'order/{0}/partial-refund',
+        orderInfo: 'order/{0}',
+        orderFullRefundInfo: 'order/full-refund/{0}',
+        orderPartialRefundInfo: 'order/full-refund/{0}'
     }
 };
-
+/**
+ * Call service to get token from Hoolah
+ * @param {Object} svc - The service
+ * @param {string} countryCode - The countryCode
+ * @returns {boolean} an result for set credential ID
+ */
 function setCredentialID(svc, countryCode) {
-    var hoolahCredentialPrefix = Site.current.getCustomPreferenceValue('hoolahCredentialPrefix');
+    var hoolahCredentialPrefix = Site.current.ID === 'Sites-Site' ? 'hoolah-auth-cre-' : Site.current.getCustomPreferenceValue('hoolahCredentialPrefix');
     var credentialID = hoolahCredentialPrefix + countryCode;
     try {
         svc.setCredentialID(credentialID);
@@ -32,10 +40,11 @@ function setCredentialID(svc, countryCode) {
 /**
  * Call service to get token from Hoolah
  * @param {string} serviceID - The service ID
+ * @param {string} countryCode - The countryCode
+ * @param {string} urlPath - The urlPath for service
  * @returns {Object} an result object
  */
 function callGetTokenService(serviceID, countryCode, urlPath) {
-    // var hoolahEndPointURL = Site.current.getCustomPreferenceValue('hoolahEndPointURL');
     var service;
     var result;
     try {
@@ -71,11 +80,12 @@ function callGetTokenService(serviceID, countryCode, urlPath) {
 /**
  * Call service to get token from Hoolah
  * @param {string} serviceID - The service ID
- * @param {Object} data - Data of order
  * @param {string} token - Token when init order
+ * @param {string} urlPath - urlPath of service
+ * @param {Object} data - Data of order
  * @returns {Object} an result object
  */
-function handleOrderService(serviceID, data, token, urlPath) {
+function handleOrderService(serviceID, token, urlPath, data) {
     var service;
     var result;
     try {
@@ -107,5 +117,5 @@ module.exports = {
     serviceIDs: serviceIDs,
     servicePaths: servicePaths,
     callGetTokenService: callGetTokenService,
-    handleOrderService: handleOrderService,
+    handleOrderService: handleOrderService
 };
