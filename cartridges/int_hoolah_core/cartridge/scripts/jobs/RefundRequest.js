@@ -41,6 +41,7 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
             if (refundResult.object.status === 'ACCEPTED') {
                 requestIDs.push(refundResult.object.requestId);
                 order.custom.hoolahOrderRefundRequestID = requestIDs;
+                order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_NOTPAID);
                 CustomObjectMgr.remove(refundRequest);
             } else {
                 refundRequest.isError = true;
