@@ -5,9 +5,10 @@
 
 var LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
 var Site = require('dw/system/Site');
+var HoolahConstants = require('int_hoolah_core/cartridge/scripts/common/HoolahConstants');
 
 const serviceIDs = {
-    id: Site.current.ID !== 'Sites-Site' ? 'hoolah.http.payment' : Site.current.getCustomPreferenceValue('hoolahServicePrefix')
+    id: Site.current.ID === 'Sites-Site' ? HoolahConstants.SERVICE_ID_DEFAULT_PREFIX : Site.current.getCustomPreferenceValue('hoolahServicePrefix')
 };
 
 const servicePaths = {
@@ -28,7 +29,7 @@ const servicePaths = {
  * @returns {boolean} an result for set credential ID
  */
 function setCredentialID(svc, countryCode) {
-    var hoolahCredentialPrefix = Site.current.ID === 'Sites-Site' ? 'hoolah-auth-cre-' : Site.current.getCustomPreferenceValue('hoolahCredentialPrefix');
+    var hoolahCredentialPrefix = Site.current.ID === 'Sites-Site' ? HoolahConstants.SERVICE_CRED_DEFAULT_PREFIX : Site.current.getCustomPreferenceValue('hoolahCredentialPrefix');
     var credentialID = hoolahCredentialPrefix + countryCode;
     try {
         svc.setCredentialID(credentialID);
@@ -42,9 +43,10 @@ function setCredentialID(svc, countryCode) {
  * @param {string} serviceID - The service ID
  * @param {string} countryCode - The countryCode
  * @param {string} urlPath - The urlPath for service
+ * @param {boolean} isJobProcess - Check if API all in job
  * @returns {Object} an result object
  */
-function callGetTokenService(serviceID, countryCode, urlPath) {
+function callGetTokenService(serviceID, countryCode, urlPath, isJobProcess) {
     var service;
     var result;
     try {
@@ -60,6 +62,9 @@ function callGetTokenService(serviceID, countryCode, urlPath) {
                 };
                 data.username = svc.configuration.credential.user;
                 data.password = svc.configuration.credential.password;
+                if (isJobProcess) {
+                    urlPath = svc.configuration.credential.URL + urlPath;
+                }
                 svc.setURL(urlPath);
                 return JSON.stringify(data);
             },
@@ -83,9 +88,10 @@ function callGetTokenService(serviceID, countryCode, urlPath) {
  * @param {string} token - Token when init order
  * @param {string} urlPath - urlPath of service
  * @param {Object} data - Data of order
+ * @param {boolean} isJobProcess - Check if API all in job
  * @returns {Object} an result object
  */
-function handleOrderService(serviceID, token, urlPath, data) {
+function handleOrderService(serviceID, token, urlPath, data, isJobProcess) {
     var service;
     var result;
     try {
@@ -96,6 +102,9 @@ function handleOrderService(serviceID, token, urlPath, data) {
                 svc.addHeader('Content-Type', 'application/json');
                 svc.addHeader('Accept', 'application/json');
                 svc.addHeader('Authorization', 'Bearer ' + token);
+                if (isJobProcess) {
+                    urlPath = svc.configuration.credential.URL + urlPath;
+                }
                 svc.setURL(urlPath);
                 return JSON.stringify(data);
             },

@@ -10,8 +10,8 @@ var Site = require('dw/system/Site');
 var StringUtils = require('dw/util/StringUtils');
 var initServices = require('int_hoolah_core/cartridge/scripts/service/init/httpServices');
 var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelper');
-var hoolahEndPointURL = Site.current.ID === 'Sites-Site' ? 'https://demo-merchant-service.demo-hoolah.co/merchant' : Site.current.getCustomPreferenceValue('hoolahEndPointURL');
-// var hoolahEndPointURL = Site.current.getCustomPreferenceValue('hoolahEndPointURL');
+var isJobProcess = (Site.current.ID === 'Sites-Site') || false;
+var hoolahEndPointURL = isJobProcess ? '' : Site.current.getCustomPreferenceValue('hoolahEndPointURL');
 
 /**
  * Call service to get token from Hoolah
@@ -21,7 +21,7 @@ var hoolahEndPointURL = Site.current.ID === 'Sites-Site' ? 'https://demo-merchan
 function createGetTokenRequest(countryCode) {
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.auth);
 
-    return initServices.callGetTokenService(initServices.serviceIDs.id, countryCode, urlPath);
+    return initServices.callGetTokenService(initServices.serviceIDs.id, countryCode, urlPath, isJobProcess);
 }
 
 /**
@@ -33,7 +33,7 @@ function createGetTokenRequest(countryCode) {
 function createInitOrderRequest(order, token) {
     var orderData = HoolahHelper.getOrderJSON(order);
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.order.initOrder);
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, orderData);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, orderData, isJobProcess);
 }
 
 /**
@@ -48,7 +48,7 @@ function createFullRefundRequest(requestObject, token) {
         description: requestObject.custom.orderResource
     };
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refundFull, orderUUID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData, isJobProcess);
 }
 
 /**
@@ -76,7 +76,7 @@ function createPartialRefundRequest(requestObject, token) {
         requestData.items = items;
     }
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refundPartial, orderUUID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData, isJobProcess);
 }
 
 /**
@@ -87,7 +87,7 @@ function createPartialRefundRequest(requestObject, token) {
  */
 function getOrderInfoRequest(orderUUID, token) {
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderInfo, orderUUID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, isJobProcess);
 }
 
 /**
@@ -98,7 +98,7 @@ function getOrderInfoRequest(orderUUID, token) {
  */
 function getFullRefundInfoRequest(token, requestID) {
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderFullRefundInfo, requestID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, isJobProcess);
 }
 
 /**
@@ -109,7 +109,7 @@ function getFullRefundInfoRequest(token, requestID) {
  */
 function getPartialRefundInfoRequest(token, requestID) {
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderPartialRefundInfo, requestID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, isJobProcess);
 }
 
 /** Exported functions **/
