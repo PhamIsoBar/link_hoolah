@@ -15,11 +15,9 @@ const servicePaths = {
     auth: 'auth/login',
     order: {
         initOrder: 'order/initiate',
-        refundFull: 'order/{0}/full-refund',
-        refundPartial: 'order/{0}/partial-refund',
+        refund: 'order/{0}/partial-refund',
         orderInfo: 'order/{0}',
-        orderFullRefundInfo: 'order/full-refund/{0}',
-        orderPartialRefundInfo: 'order/full-refund/{0}'
+        orderRefundInfo: 'order/full-refund/{0}'
     }
 };
 /**
@@ -89,15 +87,18 @@ function callGetTokenService(serviceID, countryCode, urlPath, isJobProcess) {
  * @param {string} urlPath - urlPath of service
  * @param {Object} data - Data of order
  * @param {boolean} isJobProcess - Check if API all in job
+ * @param {boolean} isGetMethod - Check if use GET method for API
  * @returns {Object} an result object
  */
-function handleOrderService(serviceID, token, urlPath, data, isJobProcess) {
+function handleOrderService(serviceID, token, urlPath, data, isJobProcess, isGetMethod) {
     var service;
     var result;
     try {
         service = LocalServiceRegistry.createService(serviceID, {
             createRequest: function (svc, data) { //eslint-disable-line
-                svc.setRequestMethod('POST');
+                if (isGetMethod) {
+                    svc.setRequestMethod('GET');
+                }
                 svc.setAuthentication('NONE');
                 svc.addHeader('Content-Type', 'application/json');
                 svc.addHeader('Accept', 'application/json');

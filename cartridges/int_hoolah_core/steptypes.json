@@ -71,6 +71,12 @@
                                     "REFUNDED"
                                 ]
                             }
+                        },
+                        {
+                            "@name": "limitOrderQuery",
+                            "@type": "double",
+                            "@required": "true",
+                            "description": "The limit order for one call"
                         }
                     ]
                 },

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns="http://www.demandware.com/xml/impex/services/2014-09-26">
-    <service-credential service-credential-id="hoolah.http.payment.auth.malay.cred">
-        <url>https://demo-merchant-service.demo-hoolah.co/merchant/auth/login</url>
+    <service-credential service-credential-id="hoolah.http.payment">
+        <url>https://demo-merchant-service.demo-hoolah.co/merchant</url>
         <user-id>de7245a6-9d5b-4724-a539-d317465be95a</user-id>
         <password masked="true">********</password>
     </service-credential>

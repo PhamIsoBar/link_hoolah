@@ -2,6 +2,7 @@
 var OrderMgr = require('dw/order/OrderMgr');
 var Transaction = require('dw/system/Transaction');
 var Status = require('dw/system/Status');
+var Order = require('dw/order/Order');
 var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRequests');
 
 /**
@@ -21,14 +22,11 @@ function processingGetInfoRequest(order, orderStatusType, jobStatus) { //eslint-
             if (orderInfo && order.custom.hoolahOrderStatus !== orderInfo.status) {
                 order.custom.hoolahOrderStatus = orderInfo.status;
             }
-        } else if (orderStatusType === 'OrderRefund') {
-            orderInfo = createRequests.getFullRefundInfoRequest(token, requestID).object;
-            if (orderInfo && order.custom.hoolahOrderRefundStatus !== orderInfo.status) {
-                order.custom.hoolahOrderRefundStatus = orderInfo.status;
-            }
         } else {
-            orderInfo = createRequests.getPartialRefundInfoRequest(token, requestID).object;
-            if (orderInfo && order.custom.hoolahOrderPartialRefundStatus !== orderInfo.status) {
+            orderInfo = createRequests.getRefundInfoRequest(token, requestID).object;
+            if (orderStatusType === 'OrderRefund' && orderInfo && order.custom.hoolahOrderRefundStatus !== orderInfo.status) {
+                order.custom.hoolahOrderRefundStatus = orderInfo.status;
+            } else if (orderStatusType === 'OrderPartialRefund' && orderInfo && order.custom.hoolahOrderPartialRefundStatus !== orderInfo.status) {
                 order.custom.hoolahOrderPartialRefundStatus = orderInfo.status;
             }
         }
@@ -47,18 +45,21 @@ function execute(args) {
     try {
         var orderStatusType = args.orderStatusType;
         var queryStatus = args.queryStatus;
+        var limitOrderQuery = args.limitOrderQuery;
         var jobStatus = true;
+        var count = 0;
         var orderList;
         if (orderStatusType === 'Order') {
-            orderList = OrderMgr.queryOrders('custom.hoolahOrderStatus = {0}', queryStatus);
+            orderList = OrderMgr.searchOrders('custom.hoolahOrderStatus={0} AND status={1} OR status={2}', 'creationDate desc', queryStatus, Order.ORDER_STATUS_OPEN, Order.ORDER_STATUS_NEW);
         } else if (orderStatusType === 'OrderRefund') {
-            orderList = OrderMgr.queryOrders('custom.hoolahOrderRefundStatus = {0}', queryStatus);
+            orderList = OrderMgr.searchOrders('custom.hoolahOrderRefundStatus = {0} AND status = {1} OR status = {2}', queryStatus, Order.ORDER_STATUS_OPEN, Order.ORDER_STATUS_NEW);
         } else {
-            orderList = OrderMgr.queryOrders('custom.hoolahOrderPartialRefundStatus = {0}', queryStatus);
+            orderList = OrderMgr.searchOrders('custom.hoolahOrderPartialRefundStatus = {0} AND status = {1} OR status = {2}', queryStatus, Order.ORDER_STATUS_OPEN, Order.ORDER_STATUS_NEW);
         }
-        while (orderList.hasNext()) {
+        while (orderList.hasNext() && count < limitOrderQuery) {
             var order = orderList.next();
             processingGetInfoRequest(order, orderStatusType, jobStatus);
+            count++;
         }
         return jobStatus ? new Status(Status.OK, 'OK') : new Status(Status.ERROR, 'ERROR');
     } catch (error) {

@@ -15,7 +15,9 @@ var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRe
 function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-disable-line
     var token = createRequests.createGetTokenRequest(order.billingAddress.countryCode.value).object.token.trim();
     var refundResult;
-    var isFullRefund = true;
+    var refundableAmount = Math.round((order.totalGrossPrice.value - order.custom.hoolahRefundedAmount) * 100) / 100;
+    var isFullRefund = (refundRequest.custom.orderRefundAmount === refundableAmount || !refundRequest.custom.orderRefundAmount) || false;
+    var refundAmount = isFullRefund ? refundableAmount : refundRequest.custom.orderRefundAmount;
     var requestIDs = [];
     if (order.custom.hoolahOrderRefundRequestID.length > 0) {
         var existedRequestID = order.custom.hoolahOrderRefundRequestID;
@@ -23,25 +25,24 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
             requestIDs.push(existedRequestID[i]);
         }
     }
-
-    if (refundRequest.custom.orderRefundAmount > 0) {
-        isFullRefund = false;
-        refundResult = createRequests.createPartialRefundRequest(refundRequest, token);
-    } else {
-        refundResult = createRequests.createFullRefundRequest(refundRequest, token);
-    }
+    refundResult = createRequests.createRefundRequest(refundRequest, refundAmount, token);
     Transaction.wrap(function () {
         if (refundResult.object) {
             if (isFullRefund) {
                 order.custom.hoolahOrderRefundStatus = refundResult.object.status;
             } else {
                 order.custom.hoolahOrderPartialRefundStatus = refundResult.object.status;
-                order.custom.hoolahPartialRefundAmount = refundRequest.custom.orderRefundAmount;
             }
             if (refundResult.object.status === 'ACCEPTED') {
+                if (!isFullRefund) {
+                    var totalPartialRefundAmount = order.custom.hoolahRefundedAmount + refundRequest.custom.orderRefundAmount;
+                    order.custom.hoolahRefundedAmount = totalPartialRefundAmount;
+                } else {
+                    order.custom.hoolahRefundedAmount = order.totalGrossPrice.value;
+                    order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_NOTPAID);
+                }
                 requestIDs.push(refundResult.object.requestId);
                 order.custom.hoolahOrderRefundRequestID = requestIDs;
-                order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_NOTPAID);
                 CustomObjectMgr.remove(refundRequest);
             } else {
                 refundRequest.isError = true;

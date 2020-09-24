@@ -39,30 +39,16 @@ function createInitOrderRequest(order, token) {
 /**
  * Call service to init order from Hoolah
  * @param {Object} requestObject - Order object
+ * @param {double} amount - Amount to refund
  * @param {string} token - Token to send request
  * @returns {Object} - result - an result object
  */
-function createFullRefundRequest(requestObject, token) {
-    var orderUUID = requestObject.custom.orderUUID;
-    var requestData = {
-        description: requestObject.custom.orderResource
-    };
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refundFull, orderUUID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData, isJobProcess);
-}
-
-/**
- * Call service to init order from Hoolah
- * @param {Object} requestObject - Order object
- * @param {string} token - Token to send request
- * @returns {Object} - result - an result object
- */
-function createPartialRefundRequest(requestObject, token) {
+function createRefundRequest(requestObject, amount, token) {
     var orderUUID = requestObject.custom.orderUUID;
     var items = [];
     var requestData = {
         description: requestObject.custom.orderResource,
-        amount: requestObject.custom.orderRefundAmount
+        amount: amount
     };
     if (requestObject.custom.orderRefundItems.length > 0) {
         var itemRefund = requestObject.custom.orderRefundItems;
@@ -75,7 +61,7 @@ function createPartialRefundRequest(requestObject, token) {
     if (items.length > 0) {
         requestData.items = items;
     }
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refundPartial, orderUUID));
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refund, orderUUID));
     return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData, isJobProcess);
 }
 
@@ -87,7 +73,7 @@ function createPartialRefundRequest(requestObject, token) {
  */
 function getOrderInfoRequest(orderUUID, token) {
     var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderInfo, orderUUID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, isJobProcess);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, {}, isJobProcess, true);
 }
 
 /**
@@ -96,29 +82,16 @@ function getOrderInfoRequest(orderUUID, token) {
  * @param {string} requestID - Request ID
  * @returns {Object} - result - an result object
  */
-function getFullRefundInfoRequest(token, requestID) {
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderFullRefundInfo, requestID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, isJobProcess);
-}
-
-/**
- * Call service to get full refund information from Hoolah
- * @param {string} token - Token to send request
- * @param {string} requestID - request ID to get info
- * @returns {Object} - result - an result object
- */
-function getPartialRefundInfoRequest(token, requestID) {
-    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderPartialRefundInfo, requestID));
-    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, isJobProcess);
+function getRefundInfoRequest(token, requestID) {
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderRefundInfo, requestID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, {}, urlPath, isJobProcess, true);
 }
 
 /** Exported functions **/
 module.exports = {
     createGetTokenRequest: createGetTokenRequest,
     createInitOrderRequest: createInitOrderRequest,
-    createFullRefundRequest: createFullRefundRequest,
-    createPartialRefundRequest: createPartialRefundRequest,
+    createRefundRequest: createRefundRequest,
     getOrderInfoRequest: getOrderInfoRequest,
-    getFullRefundInfoRequest: getFullRefundInfoRequest,
-    getPartialRefundInfoRequest: getPartialRefundInfoRequest
+    getRefundInfoRequest: getRefundInfoRequest
 };
