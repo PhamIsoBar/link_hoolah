@@ -4,51 +4,57 @@
         <display-name xml:lang="x-default">HoolahRefundRequest</display-name>
         <staging-mode>no-staging</staging-mode>
         <storage-scope>organization</storage-scope>
-        <key-definition attribute-id="ID">
+        <key-definition attribute-id="orderNo">
             <type>string</type>
             <min-length>0</min-length>
         </key-definition>
         <attribute-definitions>
-            <attribute-definition attribute-id="amount">
-                <display-name xml:lang="x-default">Amount</display-name>
-                <type>string</type>
+            <attribute-definition attribute-id="isError">
+                <display-name xml:lang="x-default">Hoolah request status</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="orderRefundAmount">
+                <display-name xml:lang="x-default">Order refund amount</display-name>
+                <type>double</type>
                 <localizable-flag>false</localizable-flag>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="description">
-                <display-name xml:lang="x-default">Description</display-name>
-                <type>string</type>
-                <localizable-flag>false</localizable-flag>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="items">
-                <display-name xml:lang="x-default">SKU of product to partial refund - optional</display-name>
+            <attribute-definition attribute-id="orderRefundItems">
+                <display-name xml:lang="x-default">Order Refund Items</display-name>
                 <type>set-of-string</type>
                 <localizable-flag>false</localizable-flag>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="order-uuid">
+            <attribute-definition attribute-id="orderResource">
+                <display-name xml:lang="x-default">Hoolah refund description</display-name>
+                <type>string</type>
+                <localizable-flag>false</localizable-flag>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="orderUUID">
                 <display-name xml:lang="x-default">Hoolah order's uuid</display-name>
                 <type>string</type>
                 <localizable-flag>false</localizable-flag>
-                <mandatory-flag>false</mandatory-flag>
+                <mandatory-flag>true</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
         </attribute-definitions>
         <group-definitions>
-            <attribute-group group-id="HoolahRefundRequest">
-                <display-name xml:lang="x-default">HoolahRefundRequest</display-name>
-                <attribute attribute-id="ID"/>
-                <attribute attribute-id="order-uuid"/>
-                <attribute attribute-id="description"/>
-                <attribute attribute-id="amount"/>
-                <attribute attribute-id="items"/>
+            <attribute-group group-id="Hoolah Payment">
+                <display-name xml:lang="x-default">Hoolah Payment</display-name>
+                <attribute attribute-id="orderNo"/>
+                <attribute attribute-id="orderUUID"/>
+                <attribute attribute-id="orderResource"/>
+                <attribute attribute-id="orderRefundItems"/>
+                <attribute attribute-id="orderRefundAmount"/>
+                <attribute attribute-id="isError"/>
             </attribute-group>
         </group-definitions>
     </custom-type>

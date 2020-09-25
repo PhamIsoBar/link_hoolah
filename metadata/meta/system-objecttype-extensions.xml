@@ -2,6 +2,47 @@
 <metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
     <type-extension type-id="Order">
         <custom-attribute-definitions>
+            <attribute-definition attribute-id="hoolahCartID">
+                <display-name xml:lang="x-default">Hoolah cart ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahFailureCode">
+                <display-name xml:lang="x-default">Hoolah failure code</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahFailureMessage">
+                <display-name xml:lang="x-default">Hoolah failure message</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahOrderPartialRefundStatus">
+                <display-name xml:lang="x-default">Hoolah partial refund status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahOrderRefundRequestID">
+                <display-name xml:lang="x-default">Hoolah refund request ID</display-name>
+                <type>set-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahOrderRefundStatus">
+                <display-name xml:lang="x-default">Hoolah full refund status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="hoolahOrderStatus">
                 <display-name xml:lang="x-default">Hoolah order status</display-name>
                 <type>string</type>
@@ -16,13 +57,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="hoolahCartID">
-                <display-name xml:lang="x-default">Hoolah cart ID</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
             <attribute-definition attribute-id="hoolahOrderUUID">
                 <display-name xml:lang="x-default">Hoolah order UUID</display-name>
                 <type>string</type>
@@ -30,47 +64,17 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="hoolahFailureMessage">
-                <display-name xml:lang="x-default">Hoolah failure message</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahFailureCode">
-                <display-name xml:lang="x-default">Hoolah failure code</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahOrderRefundStatus">
-                <display-name xml:lang="x-default">Hoolah full refund status</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahOrderRefundRequestID">
-                <display-name xml:lang="x-default">Hoolah refund request ID</display-name>
-                <type>set-of-string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahOrderPartialRefundStatus">
-                <display-name xml:lang="x-default">Hoolah partial refund status</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahRefundedAmount">
-                <display-name xml:lang="x-default">Hoolah Refund Amount</display-name>
+            <attribute-definition attribute-id="hoolahPartialRefundAmount">
+                <display-name xml:lang="x-default">Hoolah Partial Refund Amount</display-name>
                 <type>double</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahRefundedAmount">
+                <display-name xml:lang="x-default">Hoolah Partial Refund Amount</display-name>
+                <type>double</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
@@ -100,35 +104,54 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
-            <attribute-definition attribute-id="hoolahEndPointURL">
-                <display-name xml:lang="x-default">Hoolah Endpoint URLs</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoolahSGRedirectURL">
-                <display-name xml:lang="x-default">Hoolah Singapore redirect URL</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
-            <attribute-definition attribute-id="hoohlahMLRedirectURL">
+             <attribute-definition attribute-id="hoohlahMLRedirectURL">
                 <display-name xml:lang="x-default">Hoolah Malaysia redirect URL</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahAuthServicePrefix">
+                <display-name xml:lang="x-default">Hoolah Auth Service Prefix</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
             </attribute-definition>
             <attribute-definition attribute-id="hoolahCredentialPrefix">
                 <display-name xml:lang="x-default">Hoolah Credential Prefix</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahEndPointURL">
+                <display-name xml:lang="x-default">Hoolah Endpoint URLs</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahOrderServicePrefix">
+                <display-name xml:lang="x-default">Hoolah Order Service Perfix</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="hoolahSGRedirectURL">
+                <display-name xml:lang="x-default">Hoolah Singapore redirect URL</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
             </attribute-definition>
             <attribute-definition attribute-id="hoolahServicePrefix">
                 <display-name xml:lang="x-default">Hoolah Service Prefix</display-name>
                 <type>string</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
             </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>

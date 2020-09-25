@@ -3,21 +3,50 @@
     <job job-id="RefundRequestHoolah" priority="0">
         <description/>
         <parameters/>
-        <flow>
-            <context site-id="SiteGenesis"/>
-            <step step-id="RefundRequestHoolah" type="custom.RunRefundRequest" enforce-restart="false">
-                <description/>
-                <parameters>
-                    <parameter name="limitRefundCall">1</parameter>
-                </parameters>
-            </step>
-        </flow>
+        <split sequential="false">
+            <contexts template-ref="template_124">
+                <context site-id="RefArch"/>
+                <context site-id="SiteGenesis"/>
+            </contexts>
+            <flow-template template-id="template_124">
+                <step step-id="RefundRequestHoolah" type="custom.RunRefundRequest" enforce-restart="false">
+                    <description/>
+                    <parameters>
+                        <parameter name="limitRefundCall">50</parameter>
+                    </parameters>
+                </step>
+            </flow-template>
+        </split>
         <rules/>
         <triggers>
-            <run-once enabled="false">
+            <run-once enabled="true">
                 <date>2020-09-05Z</date>
                 <time>14:13:26.000Z</time>
             </run-once>
         </triggers>
     </job>
+
+    <job job-id="QueryHoolahOrderStatus" priority="0">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="SiteGenesis"/>
+            <step step-id="GetHoolahOrderStatus" type="custom.GetHoolahOrderStatus" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="orderStatusType">Order</parameter>
+                    <parameter name="queryStatus">INITIATED</parameter>
+                    <parameter name="limitOrderQuery">3</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="true">
+                <date>2020-09-21Z</date>
+                <time>03:46:45.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
 </jobs>

@@ -9,10 +9,10 @@
         </development>
         <staging/>
         <production>
-			<preference preference-id="enableHoolah">true</preference>
+            <preference preference-id="enableHoolah">true</preference>
             <preference preference-id="hoohlahMLRedirectURL">https://my.js.secure-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
             <preference preference-id="hoolahSGRedirectURL">https://js.secure-hoolah.co/?ORDER_CONTEXT_TOKEN={0}&amp;platform=bespoke&amp;version=1.0.1</preference>
-		</production>
+        </production>
     </custom-preferences>
 </preferences>
 
