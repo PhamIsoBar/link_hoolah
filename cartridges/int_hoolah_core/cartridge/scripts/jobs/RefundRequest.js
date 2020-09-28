@@ -13,20 +13,43 @@ var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRe
  * @param {boolean} jobStatus - status of job
  */
 function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-disable-line
-    var token = createRequests.createGetTokenRequest(order.billingAddress.countryCode.value).object.token;
+    var token = createRequests.createGetTokenRequest(order.billingAddress.countryCode.value).object.token.trim();
     var refundResult;
-    if (refundRequest.custom.amount > 0) {
-        refundResult = createRequests.createPartialRefundRequest(refundRequest, token).object;
-    } else {
-        refundResult = createRequests.createFullRefundRequest(refundRequest, token).object;
+    var refundableAmount = Math.round((order.totalGrossPrice.value - order.custom.hoolahRefundedAmount) * 100) / 100;
+    var isFullRefund = (refundRequest.custom.orderRefundAmount === refundableAmount || !refundRequest.custom.orderRefundAmount) || false;
+    var refundAmount = isFullRefund ? refundableAmount : refundRequest.custom.orderRefundAmount;
+    var requestIDs = [];
+    if (order.custom.hoolahOrderRefundRequestID.length > 0) {
+        var existedRequestID = order.custom.hoolahOrderRefundRequestID;
+        for (var i = 0; i < existedRequestID.length; i++) {
+            requestIDs.push(existedRequestID[i]);
+        }
     }
+    refundResult = createRequests.createRefundRequest(refundRequest, refundAmount, token);
     Transaction.wrap(function () {
-        order.custom.refundRequestId = refundResult.requestId;
-        order.custom.refundCode = refundResult.code;
-        order.custom.refundStatus = refundResult.status;
-        if (refundResult.status === 'ACCEPTED') {
-            CustomObjectMgr.remove(refundRequest);
+        if (refundResult.object) {
+            if (isFullRefund) {
+                order.custom.hoolahOrderRefundStatus = refundResult.object.status;
+            } else {
+                order.custom.hoolahOrderPartialRefundStatus = refundResult.object.status;
+            }
+            if (refundResult.object.status === 'ACCEPTED') {
+                if (!isFullRefund) {
+                    var totalPartialRefundAmount = order.custom.hoolahRefundedAmount + refundRequest.custom.orderRefundAmount;
+                    order.custom.hoolahRefundedAmount = totalPartialRefundAmount;
+                } else {
+                    order.custom.hoolahRefundedAmount = order.totalGrossPrice.value;
+                    order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_NOTPAID);
+                }
+                requestIDs.push(refundResult.object.requestId);
+                order.custom.hoolahOrderRefundRequestID = requestIDs;
+                CustomObjectMgr.remove(refundRequest);
+            } else {
+                refundRequest.isError = true;
+                jobStatus = false;
+            }
         } else {
+            refundRequest.custom.isError = true;
             jobStatus = false;
         }
     });
@@ -39,15 +62,15 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
  */
 function execute(args) {
     try {
-        var allRefundRequest = CustomObjectMgr.getAllCustomObjects('HoolahRefundRequest');
+        var allRefundRequest = CustomObjectMgr.queryCustomObjects('HoolahRefundRequest', 'custom.isError != true', null);
         var limitRefundCall = args.limitRefundCall > allRefundRequest.count ? allRefundRequest.count : args.limitRefundCall;
         var jobStatus = true;
         var count = 0;
         while (allRefundRequest.hasNext() && count < limitRefundCall) {
             var refundRequest = allRefundRequest.next();
-            var hoolahOrderUUID = refundRequest.custom['order-uuid'];
+            var hoolahOrderUUID = refundRequest.custom.orderUUID;
             var orderRefund = OrderMgr.searchOrder(
-                'custom.orderHoolahUUID={0}',
+                'custom.hoolahOrderUUID={0}',
                 hoolahOrderUUID
             );
             if (orderRefund && (orderRefund.status.value === Order.ORDER_STATUS_OPEN || orderRefund.status.value === Order.ORDER_STATUS_NEW)) {

@@ -76,16 +76,16 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
                 );
             } else {
                 initOrderHoolah = initOrderHoolahResult.object;
-                var orderContextToken = initOrderHoolah.orderContextToken;
+                var hoolahOrderToken = initOrderHoolah.orderContextToken;
                 Transaction.wrap(function () {
-                    order.custom.orderContextToken = orderContextToken;
+                    order.custom.hoolahOrderToken = hoolahOrderToken;
                 });
                 if (countryCode === 'SG') {
-                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageSing');
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahSGRedirectURL');
                 } else {
-                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoolahLandingPageMalay');
+                    hoolahURL = require('dw/system/Site').current.getCustomPreferenceValue('hoohlahMLRedirectURL');
                 }
-                hoolahURL = StringUtils.format(hoolahURL, orderContextToken);
+                hoolahURL = StringUtils.format(hoolahURL, hoolahOrderToken);
             }
         } else {
             result = JSON.parse(tokenResult.errorMessage);

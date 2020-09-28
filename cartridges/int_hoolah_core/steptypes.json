@@ -31,6 +31,71 @@
                         }
                     ]
                 }
+            },
+            {
+                "@type-id": "custom.GetHoolahOrderStatus",
+                "module": "int_hoolah_core/cartridge/scripts/jobs/GetOrderStatus",
+                "function": "execute",
+                "parameters": {
+                    "parameters": [
+                        {
+                            "@name": "orderStatusType",
+                            "@type": "string",
+                            "@required": "true",
+                            "description": "Type for query order",
+                            "enum-values": {
+                                "value": [
+                                    "Order",
+                                    "OrderRefund",
+                                    "OrderPartialRefund"
+                                ]
+                            }
+                        },
+                        {
+                            "@name": "queryStatus",
+                            "@type": "string",
+                            "@required": "true",
+                            "description": "Order status type for query",
+                            "enum-values": {
+                                "value": [
+                                    "ACCEPTED",
+                                    "IN_PROCESS",
+                                    "REJECTED",
+                                    "DONE",
+                                    "FAILED",
+                                    "INITIATED",
+                                    "APPROVED",
+                                    "CANCELLED",
+                                    "REJECTED",
+                                    "REVERSED",
+                                    "REFUNDED"
+                                ]
+                            }
+                        },
+                        {
+                            "@name": "limitOrderQuery",
+                            "@type": "double",
+                            "@required": "true",
+                            "description": "The limit order for one call"
+                        }
+                    ]
+                },
+                "status-codes": {
+                    "status": [
+                        {
+                            "@code": "ERROR",
+                            "description": "Used when an error occurred."
+                        },
+                        {
+                            "@code": "OK",
+                            "description": "Used when everything went well."
+                        },
+                        {
+                            "@code": "WARN",
+                            "description": "Used when small, but acceptable problems occurred."
+                        }
+                    ]
+                }
             }
         ]
     }

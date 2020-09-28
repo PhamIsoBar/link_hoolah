@@ -6,10 +6,12 @@
 *
 *
 /*********************************************************************************/
-var HoolahConstants = require('int_hoolah_core/cartridge/scripts/common/HoolahConstants');
+var Site = require('dw/system/Site');
+var StringUtils = require('dw/util/StringUtils');
 var initServices = require('int_hoolah_core/cartridge/scripts/service/init/httpServices');
 var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelper');
-
+var isJobProcess = (Site.current.ID === 'Sites-Site') || false;
+var hoolahEndPointURL = isJobProcess ? '' : Site.current.getCustomPreferenceValue('hoolahEndPointURL');
 
 /**
  * Call service to get token from Hoolah
@@ -17,13 +19,9 @@ var HoolahHelper = require('int_hoolah_core/cartridge/scripts/common/HoolahHelpe
  * @returns {Object} result - an result object
  */
 function createGetTokenRequest(countryCode) {
-    var result;
-    if (countryCode === 'MY') {
-        result = initServices.callGetTokenService(HoolahConstants.MALAY_AUTH_SERVICE);
-    } else {
-        result = initServices.callGetTokenService(HoolahConstants.SING_AUTH_SERVICE);
-    }
-    return result;
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.auth);
+
+    return initServices.callGetTokenService(initServices.serviceIDs.id, countryCode, urlPath, isJobProcess);
 }
 
 /**
@@ -34,38 +32,26 @@ function createGetTokenRequest(countryCode) {
  */
 function createInitOrderRequest(order, token) {
     var orderData = HoolahHelper.getOrderJSON(order);
-    return initServices.callInitOrderService(HoolahConstants.INIT_ORDER_SERVICE, orderData, token);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, initServices.servicePaths.order.initOrder);
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, orderData, isJobProcess);
 }
 
 /**
  * Call service to init order from Hoolah
  * @param {Object} requestObject - Order object
+ * @param {double} amount - Amount to refund
  * @param {string} token - Token to send request
  * @returns {Object} - result - an result object
  */
-function createFullRefundRequest(requestObject, token) {
-    var orderUUID = requestObject.custom['order-uuid'];
-    var requestData = {
-        description: requestObject.custom.description
-    };
-    return initServices.callRefundService(HoolahConstants.FULL_REFUND_SERVICE, requestData, token, orderUUID);
-}
-
-/**
- * Call service to init order from Hoolah
- * @param {Object} requestObject - Order object
- * @param {string} token - Token to send request
- * @returns {Object} - result - an result object
- */
-function createPartialRefundRequest(requestObject, token) {
-    var orderUUID = requestObject.custom['order-uuid'];
+function createRefundRequest(requestObject, amount, token) {
+    var orderUUID = requestObject.custom.orderUUID;
     var items = [];
     var requestData = {
-        description: requestObject.custom.description,
-        amount: requestObject.custom.amount
+        description: requestObject.custom.orderResource,
+        amount: amount
     };
-    if (requestObject.custom.items.length > 0) {
-        var itemRefund = requestObject.custom.items;
+    if (requestObject.custom.orderRefundItems.length > 0) {
+        var itemRefund = requestObject.custom.orderRefundItems;
         for (var i = 0; i < itemRefund.length; i++) {
             items.push({
                 sku: itemRefund[i]
@@ -75,13 +61,37 @@ function createPartialRefundRequest(requestObject, token) {
     if (items.length > 0) {
         requestData.items = items;
     }
-    return initServices.callRefundService(HoolahConstants.PARTIAL_REFUND_SERVICE, requestData, token, orderUUID);
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.refund, orderUUID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, requestData, isJobProcess);
+}
+
+/**
+ * Call service to get order information from Hoolah
+ * @param {string} orderUUID - Order Hoolah UUID
+ * @param {string} token - Token to send request
+ * @returns {Object} - result - an result object
+ */
+function getOrderInfoRequest(orderUUID, token) {
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderInfo, orderUUID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, urlPath, {}, isJobProcess, true);
+}
+
+/**
+ * Call service to get full refund information from Hoolah
+ * @param {string} token - Token to send request
+ * @param {string} requestID - Request ID
+ * @returns {Object} - result - an result object
+ */
+function getRefundInfoRequest(token, requestID) {
+    var urlPath = StringUtils.format('{0}/{1}', hoolahEndPointURL, StringUtils.format(initServices.servicePaths.order.orderRefundInfo, requestID));
+    return initServices.handleOrderService(initServices.serviceIDs.id, token, {}, urlPath, isJobProcess, true);
 }
 
 /** Exported functions **/
 module.exports = {
     createGetTokenRequest: createGetTokenRequest,
     createInitOrderRequest: createInitOrderRequest,
-    createFullRefundRequest: createFullRefundRequest,
-    createPartialRefundRequest: createPartialRefundRequest
+    createRefundRequest: createRefundRequest,
+    getOrderInfoRequest: getOrderInfoRequest,
+    getRefundInfoRequest: getRefundInfoRequest
 };
