@@ -25,7 +25,7 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
             requestIDs.push(existedRequestID[i]);
         }
     }
-    refundResult = createRequests.createRefundRequest(refundRequest, refundAmount, token);
+    refundResult = createRequests.createRefundRequest(refundRequest, refundAmount, token, order.custom.hoolahOrderUUID);
     Transaction.wrap(function () {
         if (refundResult.object) {
             if (isFullRefund) {

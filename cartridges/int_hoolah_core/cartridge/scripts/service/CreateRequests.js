@@ -43,8 +43,7 @@ function createInitOrderRequest(order, token) {
  * @param {string} token - Token to send request
  * @returns {Object} - result - an result object
  */
-function createRefundRequest(requestObject, amount, token) {
-    var orderUUID = requestObject.custom.orderUUID;
+function createRefundRequest(requestObject, amount, token, orderUUID) {
     var items = [];
     var requestData = {
         description: requestObject.custom.orderResource,
