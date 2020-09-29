@@ -25,7 +25,7 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
             requestIDs.push(existedRequestID[i]);
         }
     }
-    refundResult = createRequests.createRefundRequest(refundRequest, refundAmount, token);
+    refundResult = createRequests.createRefundRequest(refundRequest, refundAmount, token, order.custom.hoolahOrderUUID);
     Transaction.wrap(function () {
         if (refundResult.object) {
             if (isFullRefund) {
@@ -68,10 +68,10 @@ function execute(args) {
         var count = 0;
         while (allRefundRequest.hasNext() && count < limitRefundCall) {
             var refundRequest = allRefundRequest.next();
-            var hoolahOrderUUID = refundRequest.custom.orderUUID;
+            var orderNo = refundRequest.custom.orderNo;
             var orderRefund = OrderMgr.searchOrder(
-                'custom.hoolahOrderUUID={0}',
-                hoolahOrderUUID
+                'orderNo={0}',
+                orderNo
             );
             if (orderRefund && (orderRefund.status.value === Order.ORDER_STATUS_OPEN || orderRefund.status.value === Order.ORDER_STATUS_NEW)) {
                 processingRefundRequest(refundRequest, orderRefund, jobStatus);
