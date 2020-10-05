@@ -10,11 +10,12 @@ var createRequests = require('int_hoolah_core/cartridge/scripts/service/CreateRe
  * Attempts to place the order
  * @param {Object} refundRequest - The refund request need to be done
  * @param {Object} order - an Object of order to be refunded
- * @param {boolean} jobStatus - status of job
+ * @return {boolean} jobStatus - jobStatus for refund request
  */
-function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-disable-line
+function processingRefundRequest(refundRequest, order) { //eslint-disable-line
     var token = createRequests.createGetTokenRequest(order.billingAddress.countryCode.value).object.token.trim();
     var refundResult;
+    var jobStatus = true;
     var refundableAmount = Math.round((order.totalGrossPrice.value - order.custom.hoolahRefundedAmount) * 100) / 100;
     var isFullRefund = (refundRequest.custom.orderRefundAmount === refundableAmount || !refundRequest.custom.orderRefundAmount) || false;
     var refundAmount = isFullRefund ? refundableAmount : refundRequest.custom.orderRefundAmount;
@@ -50,9 +51,17 @@ function processingRefundRequest(refundRequest, order, jobStatus) { //eslint-dis
             }
         } else {
             refundRequest.custom.isError = true;
+            var errorMessage = JSON.parse(refundResult.errorMessage);
+            order.custom.hoolahOrderRefundErrorMessage = errorMessage.message;
+            if (isFullRefund) {
+                order.custom.hoolahOrderRefundStatus = errorMessage.status;
+            } else {
+                order.custom.hoolahOrderPartialRefundStatus = errorMessage.status;
+            }
             jobStatus = false;
         }
     });
+    return jobStatus;
 }
 
 /**
@@ -74,7 +83,10 @@ function execute(args) {
                 orderNo
             );
             if (orderRefund && (orderRefund.status.value === Order.ORDER_STATUS_OPEN || orderRefund.status.value === Order.ORDER_STATUS_NEW)) {
-                processingRefundRequest(refundRequest, orderRefund, jobStatus);
+                var result = processingRefundRequest(refundRequest, orderRefund);
+                if (jobStatus) {
+                    jobStatus = result;
+                }
             }
             count++;
         }

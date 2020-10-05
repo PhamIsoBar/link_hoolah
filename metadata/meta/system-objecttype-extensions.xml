@@ -64,6 +64,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hoolahOrderRefundErrorMessage">
+                <display-name xml:lang="x-default">Hoolah order refund error message</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="hoolahPartialRefundAmount">
                 <display-name xml:lang="x-default">Hoolah Partial Refund Amount</display-name>
                 <type>double</type>
@@ -93,6 +100,7 @@
                 <attribute attribute-id="hoolahOrderRefundStatus"/>
                 <attribute attribute-id="hoolahOrderPartialRefundStatus"/>
                 <attribute attribute-id="hoolahRefundedAmount"/>
+                <attribute attribute-id="hoolahOrderRefundErrorMessage"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
