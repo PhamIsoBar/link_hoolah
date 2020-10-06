@@ -42,7 +42,6 @@
             <attribute-group group-id="Hoolah Payment">
                 <display-name xml:lang="x-default">Hoolah Payment</display-name>
                 <attribute attribute-id="orderNo"/>
-                <attribute attribute-id="orderUUID"/>
                 <attribute attribute-id="orderResource"/>
                 <attribute attribute-id="orderRefundItems"/>
                 <attribute attribute-id="orderRefundAmount"/>

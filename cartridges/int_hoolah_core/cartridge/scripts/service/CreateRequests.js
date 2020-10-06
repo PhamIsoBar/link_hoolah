@@ -41,6 +41,7 @@ function createInitOrderRequest(order, token) {
  * @param {Object} requestObject - Order object
  * @param {double} amount - Amount to refund
  * @param {string} token - Token to send request
+ * @param {string} orderUUID - orderUUID to send request
  * @returns {Object} - result - an result object
  */
 function createRefundRequest(requestObject, amount, token, orderUUID) {
