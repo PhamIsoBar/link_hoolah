@@ -40,8 +40,8 @@ function processingRefundRequest(refundRequest, order) { //eslint-disable-line
                     order.custom.hoolahRefundedAmount = totalPartialRefundAmount;
                 } else {
                     order.custom.hoolahRefundedAmount = order.totalGrossPrice.value;
-                    order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_NOTPAID);
                 }
+                order.setPaymentStatus(require('dw/order/Order').PAYMENT_STATUS_NOTPAID);
                 requestIDs.push(refundResult.object.requestId);
                 order.custom.hoolahOrderRefundRequestID = requestIDs;
                 CustomObjectMgr.remove(refundRequest);
