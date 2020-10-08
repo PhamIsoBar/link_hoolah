@@ -6,6 +6,6 @@
         >
     </script>
 </isloop>
-<isif condition="${require('dw/system/Site').getCurrent().getCustomPreferenceValue('hoolahCDNUrl')}">
+<isif condition="${require('dw/system/Site').getCurrent().getCustomPreferenceValue('enableHoolah')}">
     <script src="${require('dw/system/Site').getCurrent().getCustomPreferenceValue('hoolahCDNUrl')}" defer="defer"></script>
 </isif>
