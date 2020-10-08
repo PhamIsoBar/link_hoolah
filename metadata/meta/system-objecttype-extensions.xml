@@ -161,6 +161,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="hoolahCDNUrl">
+                <display-name xml:lang="x-default">Hoolah CDN URL</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="Hoolah Payment">
@@ -171,6 +178,7 @@
                 <attribute attribute-id="hoolahCredentialPrefix"/>
                 <attribute attribute-id="hoolahSGRedirectURL"/>
                 <attribute attribute-id="hoohlahMLRedirectURL"/>
+                <attribute attribute-id="hoolahCDNUrl"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
